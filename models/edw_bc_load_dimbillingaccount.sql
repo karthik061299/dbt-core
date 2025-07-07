@@ -143,15 +143,29 @@ source_data AS (
   ),
 {% endif %}
 
-
 -- Join source to existing to determine insert/update
 joined AS (
     SELECT
         s.*,
-        e.EDWBeanVersion
+        -- On an incremental run, this column will have the BeanVersion from the existing target table.
+        -- On a full-refresh (or the first run), this column will be NULL.
+        {% if is_incremental() %}
+            e.EDWBeanVersion
+        {% else %}
+            NULL AS EDWBeanVersion
+        {% endif %}
     FROM source_data s
-    LEFT JOIN existing_dim e
-        ON s.PublicID = e.PublicID
+    {% if is_incremental() %}
+    -- This JOIN only executes on incremental runs, after the table has already been created.
+    -- This prevents the "object does not exist" error on the first run.
+    LEFT JOIN (
+        SELECT
+            PublicID,
+            BeanVersion AS EDWBeanVersion
+        FROM {{ this }}
+        WHERE LegacySourceSystem = 'WC'
+    ) e ON s.PublicID = e.PublicID
+    {% endif %}
 ),
 
 -- Split logic: 
