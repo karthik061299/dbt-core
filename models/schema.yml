@@ -1,21 +1,74 @@
-
 version: 2
 
 models:
-  - name: my_first_dbt_model
-    description: "A starter dbt model"
+  - name: edw_bc_load_dimbillingaccount
+    description: >
+      Incremental upsert model for loading DimBillingAccount from Guidewire BC sources.
     columns:
-      - name: id
-        description: "The primary key for this table"
-        data_tests:
-          - unique
+      - name: PublicID
+        description: Unique identifier for the account (primary key).
+        tests:
           - not_null
+          - unique
 
-  - name: my_second_dbt_model
-    description: "A starter dbt model"
-    columns:
-      - name: id
-        description: "The primary key for this table"
-        data_tests:
-          - unique
-          - not_null
+      - name: AccountNumber
+        description: The billing account number.
+      - name: AccountName
+        description: Name of the billing account.
+      - name: AccountTypeName
+        description: Type of the account from account type dimension.
+      - name: ParentAccountNumber
+        description: Parent account number if linked.
+      - name: BillingLevelName
+        description: Billing level from dimension.
+      - name: Segment
+        description: Account segment classification.
+      - name: ServiceTierName
+        description: Customer service tier.
+      - name: SecurityZone
+        description: Security zone associated with the account.
+      - name: FirstName
+        description: First name of the insured.
+      - name: LastName
+        description: Last name of the insured.
+      - name: AddressLine1
+      - name: AddressLine2
+      - name: AddressLine3
+      - name: City
+      - name: State
+      - name: PostalCode
+      - name: AccountCloseDate
+      - name: AccountCreationDate
+      - name: DeliquencyStatusName
+      - name: FirstTwicePerMonthInvoiceDayOfMonth
+      - name: SecondTwicePerMonthInvoiceDayOfMonth
+      - name: GWRowNumber
+      - name: BeanVersion
+        description: Combined version for change detection.
+      - name: IsActive
+        description: Indicates if the record is active.
+      - name: LegacySourceSystem
+        description: Always 'WC' for Workers Comp.
+      - name: BatchID
+        description: Batch identifier for data load.
+
+sources:
+  - name: guidewire
+    database: DBT
+    schema: GUIDEWIRE
+    tables:
+      - name: bc_ParentAcct
+      - name: bc_account
+      - name: bc_accountcontact
+      - name: bc_accountcontactrole
+      - name: bc_contact
+      - name: bc_address
+      - name: bctl_state
+      - name: bctl_accountrole
+      - name: bctl_accounttype
+      - name: bctl_billinglevel
+      - name: bctl_customerservicetier
+      - name: bc_securityzone
+      - name: bctl_delinquencystatus
+      - name: bctl_accountsegment
+ 
