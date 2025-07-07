@@ -127,45 +127,35 @@ source_data AS (
 ),
 
 -- Lookup existing DimBillingAccount records for upsert logic
-{% if not execute %}
-  -- In preview mode (e.g., compiling docs or preview), skip referencing {{ this }}
-  existing_dim AS (
-      SELECT NULL AS PublicID, NULL AS EDWBeanVersion
-      WHERE FALSE
-  ),
-{% else %}
+{% if is_incremental() %}
+  -- If the model is running incrementally, query the existing table
   existing_dim AS (
     SELECT
         PublicID,
         BeanVersion AS EDWBeanVersion
-    FROM {{ this }} --DBT.SOURCE.EDW_BC_LOAD_DIMBILLINGACCOUNT
+    FROM {{ this }} -- This resolves to DBT.DBT_GUIDEWIRE.EDW_BC_LOAD_DIMBILLINGACCONT
       WHERE LegacySourceSystem = 'WC'
   ),
+{% else %}
+  -- On a full-refresh or the very first run, create a dummy CTE 
+  -- so the downstream JOIN doesn't fail.
+  existing_dim AS (
+    SELECT
+      CAST(NULL AS VARCHAR) AS PublicID,
+      CAST(NULL AS VARCHAR) AS EDWBeanVersion
+    WHERE 1=0 -- Ensures no rows are returned
+  ),
 {% endif %}
+
 
 -- Join source to existing to determine insert/update
 joined AS (
     SELECT
         s.*,
-        -- On an incremental run, this column will have the BeanVersion from the existing target table.
-        -- On a full-refresh (or the first run), this column will be NULL.
-        {% if is_incremental() %}
-            e.EDWBeanVersion
-        {% else %}
-            NULL AS EDWBeanVersion
-        {% endif %}
+        e.EDWBeanVersion
     FROM source_data s
-    {% if is_incremental() %}
-    -- This JOIN only executes on incremental runs, after the table has already been created.
-    -- This prevents the "object does not exist" error on the first run.
-    LEFT JOIN (
-        SELECT
-            PublicID,
-            BeanVersion AS EDWBeanVersion
-        FROM {{ this }}
-        WHERE LegacySourceSystem = 'WC'
-    ) e ON s.PublicID = e.PublicID
-    {% endif %}
+    LEFT JOIN existing_dim e
+        ON s.PublicID = e.PublicID
 ),
 
 -- Split logic: 
