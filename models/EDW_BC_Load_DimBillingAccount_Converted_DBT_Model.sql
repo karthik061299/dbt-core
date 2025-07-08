@@ -4,7 +4,7 @@
     on_schema_change = 'sync_all_columns',
     database='DBT',
     schema='GUIDEWIRE',
-    alias='EDW_BC_LOAD_DIMBILLINGACCOUNT'
+    alias='EDW_BC_LOAD_DIMBILLINGACCONT'
 ) }}
 
 -- 
@@ -88,7 +88,7 @@ source_data AS (
         'WC' AS LegacySourceSystem,
         -- Derived columns (equivalent to SSIS Derived Column transformation)
         '{{ var("batch_id", "default_batch") }}' AS BatchID,
-        -- Update times for incremental filter (equivalent to SSIS parameterized query)
+        -- Update times for incremental filter (equivalent to SSIS date parameter filtering)
         dt.UpdateTime AS dt_UpdateTime,
         parent_acct.ParentUpdateTime,
         sz.UpdateTime AS sz_UpdateTime,
@@ -114,6 +114,7 @@ source_data AS (
     LEFT JOIN {{ source('guidewire', 'bctl_accountsegment') }} bas
         ON bas.ID = dt.Segment
     {% if is_incremental() %}
+    -- Equivalent to SSIS date parameter filtering with DATEADD function
     WHERE
         (
             dt.UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
@@ -127,30 +128,26 @@ source_data AS (
     {% endif %}
 ),
 
--- Lookup existing DimBillingAccount records for upsert logic
--- (equivalent to SSIS Lookup transformation)
+-- Equivalent to SSIS Lookup transformation for existing DimBillingAccount records
 {% if is_incremental() %}
-  -- If the model is running incrementally, query the existing table
   existing_dim AS (
     SELECT
         PublicID,
         BeanVersion AS EDWBeanVersion
-    FROM {{ this }} -- This resolves to DBT.DBT_GUIDEWIRE.EDW_BC_LOAD_DIMBILLINGACCOUNT
-      WHERE LegacySourceSystem = 'WC'
+    FROM {{ this }}
+    WHERE LegacySourceSystem = 'WC'
   ),
 {% else %}
-  -- On a full-refresh or the very first run, create a dummy CTE 
-  -- so the downstream JOIN doesn't fail.
+  -- On full-refresh, create empty CTE to avoid JOIN failures
   existing_dim AS (
     SELECT
       CAST(NULL AS VARCHAR) AS PublicID,
       CAST(NULL AS VARCHAR) AS EDWBeanVersion
-    WHERE 1=0 -- Ensures no rows are returned
+    WHERE 1=0
   ),
 {% endif %}
 
--- Join source to existing to determine insert/update
--- (equivalent to SSIS Lookup transformation with match/no match outputs)
+-- Join source to existing to determine insert/update (equivalent to SSIS Conditional Split)
 joined AS (
     SELECT
         s.*,
@@ -172,8 +169,7 @@ to_upsert AS (
         OR BeanVersion != EDWBeanVersion -- update
 )
 
--- Final SELECT with all columns for the target table
--- (equivalent to SSIS OLEDB Destination)
+-- Final SELECT equivalent to SSIS OLEDB Destination
 SELECT
     AccountNumber,
     AccountName,
@@ -207,15 +203,13 @@ FROM to_upsert
 -- 
 -- CONVERSION NOTES:
 -- 1. SSIS Row Count transformations are replaced by DBT run results and logging
--- 2. SSIS Execute SQL Tasks for process initiation/completion are handled by DBT hooks if needed
--- 3. SSIS Error handling is managed by DBT's built-in error handling and logging
--- 4. SSIS Variables (SourceCount, UpdateCount, InsertCount, UnChangeCount) are replaced by DBT run statistics
--- 5. SSIS OLEDB Command for updates is replaced by DBT's incremental upsert logic
--- 6. SSIS Precedence Constraints are replaced by DBT's dependency management
+-- 2. SSIS OLEDB Command (UPDATE) is handled by DBT incremental materialization
+-- 3. SSIS Error Handling is managed by DBT's built-in error handling and logging
+-- 4. SSIS Variables (SourceCount, InsertCount, etc.) are replaced by DBT run metadata
+-- 5. SSIS Execute SQL Tasks are replaced by DBT pre/post hooks if needed
 --
--- MANUAL INTERVENTION REQUIRED:
--- - Review and configure appropriate DBT variables for batch_id
--- - Set up proper source configurations in sources.yml
--- - Configure appropriate incremental strategy based on data volume and requirements
--- - Review and adjust the incremental filter date range (-7 days) as needed
+-- TODO: Manual Intervention Required:
+-- - Review any custom Script Tasks or .NET code from original SSIS package
+-- - Validate data types and casting logic
+-- - Test incremental logic with actual data
 --
