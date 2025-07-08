@@ -1,13 +1,13 @@
 {{ config(
-    materialized = 'incremental',
-    unique_key = 'PublicID',
-    on_schema_change = 'sync_all_columns',
+    materialized='incremental',
+    unique_key='PublicID',
+    on_schema_change='sync_all_columns',
     database='DBT',
     schema='GUIDEWIRE',
-    alias='EDW_BC_LOAD_DIMBILLINGACCONT'
+    alias='DimBillingAccount'
 ) }}
 
--- 
+--
 -- DBT Model: DimBillingAccount Incremental Upsert
 -- Converted from SSIS Package: EDW_BC_Load_DimBillingAccount.dtsx
 -- Source: GuideWire (multiple tables via complex CTEs)
@@ -17,7 +17,7 @@
 -- BatchID is passed as a variable
 --
 
-WITH parent_acct AS(
+WITH parent_acct AS (
     SELECT
         pa.OwnerID,
         CAST(act.AccountNumber AS INT) AS ParentAccountNumber,
@@ -83,7 +83,11 @@ source_data AS (
         dt.SecondTwicePerMthInvoiceDOM AS SecondTwicePerMonthInvoiceDayOfMonth,
         dt.PublicID,
         dt.ID AS GWRowNumber,
-        CAST(CONCAT(dt.BeanVersion, COALESCE(parent_acct.ParentBeanVersion, ''), COALESCE(sz.BeanVersion, '')) AS VARCHAR(50)) AS BeanVersion,
+        CAST(CONCAT(
+            dt.BeanVersion,
+            COALESCE(parent_acct.ParentBeanVersion, ''),
+            COALESCE(sz.BeanVersion, '')
+        ) AS VARCHAR(50)) AS BeanVersion,
         CASE dt.Retired WHEN 0 THEN 1 ELSE 0 END AS IsActive,
         'WC' AS LegacySourceSystem,
         -- Derived columns (equivalent to SSIS Derived Column transformation)
@@ -114,7 +118,7 @@ source_data AS (
     LEFT JOIN {{ source('guidewire', 'bctl_accountsegment') }} bas
         ON bas.ID = dt.Segment
     {% if is_incremental() %}
-    -- Incremental filter equivalent to SSIS parameterized query with date filters
+    -- Equivalent to SSIS parameterized date filtering
     WHERE
         (
             dt.UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
@@ -128,30 +132,25 @@ source_data AS (
     {% endif %}
 ),
 
--- Lookup existing DimBillingAccount records for upsert logic
--- This replaces the SSIS Lookup transformation
+-- Equivalent to SSIS Lookup transformation
 {% if is_incremental() %}
-  -- If the model is running incrementally, query the existing table
-  existing_dim AS (
+existing_dim AS (
     SELECT
         PublicID,
         BeanVersion AS EDWBeanVersion
-    FROM {{ this }} -- This resolves to DBT.DBT_GUIDEWIRE.EDW_BC_LOAD_DIMBILLINGACCONT
-      WHERE LegacySourceSystem = 'WC'
-  ),
+    FROM {{ this }}
+    WHERE LegacySourceSystem = 'WC'
+),
 {% else %}
-  -- On a full-refresh or the very first run, create a dummy CTE 
-  -- so the downstream JOIN doesn't fail.
-  existing_dim AS (
+existing_dim AS (
     SELECT
-      CAST(NULL AS VARCHAR) AS PublicID,
-      CAST(NULL AS VARCHAR) AS EDWBeanVersion
-    WHERE 1=0 -- Ensures no rows are returned
-  ),
+        CAST(NULL AS VARCHAR) AS PublicID,
+        CAST(NULL AS VARCHAR) AS EDWBeanVersion
+    WHERE 1=0
+),
 {% endif %}
 
--- Join source to existing to determine insert/update
--- This replaces the SSIS Lookup join logic
+-- Join source to existing (equivalent to SSIS Lookup join)
 joined AS (
     SELECT
         s.*,
@@ -161,20 +160,18 @@ joined AS (
         ON s.PublicID = e.PublicID
 ),
 
--- Split logic equivalent to SSIS Conditional Split transformation:
---   - If EDWBeanVersion is null, it's an insert (new record)
---   - If BeanVersion != EDWBeanVersion, it's an update (changed record)
---   - If BeanVersion == EDWBeanVersion, it's unchanged (skip)
+-- Equivalent to SSIS Conditional Split transformation
+-- Split logic based on BeanVersion comparison
 to_upsert AS (
     SELECT *
     FROM joined
     WHERE
-        EDWBeanVersion IS NULL -- insert (equivalent to SSIS "No Match Output")
-        OR BeanVersion != EDWBeanVersion -- update (equivalent to SSIS "Default Output" from Conditional Split)
+        EDWBeanVersion IS NULL -- insert (new record)
+        OR BeanVersion != EDWBeanVersion -- update (changed record)
+    -- Records where BeanVersion == EDWBeanVersion are unchanged and excluded
 )
 
--- Final SELECT statement - equivalent to SSIS OLE DB Destination
--- DBT's incremental materialization handles the INSERT/UPDATE logic automatically
+-- Final SELECT - equivalent to SSIS OLEDB Destination
 SELECT
     AccountNumber,
     AccountName,
@@ -202,19 +199,32 @@ SELECT
     BeanVersion,
     IsActive,
     LegacySourceSystem,
-    BatchID
+    BatchID,
+    CURRENT_TIMESTAMP AS DateUpdated
 FROM to_upsert
 
--- 
--- CONVERSION NOTES:
--- 1. SSIS Row Count transformations are replaced by DBT run results and logging
--- 2. SSIS OLE DB Command (UPDATE) is handled by DBT's incremental materialization
--- 3. SSIS Control Flow (SQL tasks for process initiation/completion) should be handled by orchestration tools
--- 4. SSIS Error handling is replaced by DBT's built-in error handling and logging
--- 5. SSIS Variables (SourceCount, InsertCount, etc.) are replaced by DBT run results
 --
--- MANUAL INTERVENTION REQUIRED:
--- - Configure orchestration tool to handle process initiation and completion logging
--- - Set up proper error handling and alerting in the orchestration layer
--- - Configure batch_id variable in DBT project or pass via orchestration
+-- SSIS Components Converted:
+-- 1. OLE_SRC - GuideWire: Converted to source() references and CTEs
+-- 2. CNT - Source Count: Handled by DBT run results and logging
+-- 3. DRV - BatchID & Legacy: Converted to derived columns in SELECT
+-- 4. LKP - DimBillingAccount: Converted to existing_dim CTE with LEFT JOIN
+-- 5. CSPL - Check BeanVersion: Converted to to_upsert CTE with WHERE conditions
+-- 6. CNT - Update/Insert/Unchange Count: Handled by DBT logging
+-- 7. CMD - Update DimBillingAccount: Handled by incremental materialization
+-- 8. Load DimBillingAccount: Handled by incremental materialization
+--
+-- Control Flow Components:
+-- - SQL- Initiate Process: Handled by DBT pre-hooks if needed
+-- - SQL - Conclude Process Completed/Failed: Handled by DBT post-hooks and error handling
+-- - Error Handlers: Handled by DBT's built-in error handling and logging
+--
+-- Variables:
+-- - User::BatchID: Converted to {{ var('batch_id') }}
+-- - Row counts: Available through DBT run results
+--
+-- Manual Intervention Required:
+-- - Review and configure batch_id variable in dbt_project.yml or profiles.yml
+-- - Implement custom logging if detailed row counts are required
+-- - Configure error notification if needed beyond DBT's standard error handling
 --
