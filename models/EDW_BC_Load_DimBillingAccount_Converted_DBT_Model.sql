@@ -36,8 +36,8 @@ WITH ParentAcct AS (
         CAST(act.AccountNumber AS INT) AS ParentAccountNumber,
         CONCAT(pa.BeanVersion, act.BeanVersion) AS BeanVersion,
         act.UpdateTime
-    FROM bc_ParentAcct pa
-    JOIN bc_account act ON act.ID = pa.ForeignEntityID
+    FROM {{ source('guidewire', 'bc_ParentAcct') }} pa
+    JOIN {{ source('guidewire', 'bc_account') }} act ON act.ID = pa.ForeignEntityID
 ),
 
 InsuredInfo AS (
@@ -56,12 +56,12 @@ InsuredInfo AS (
         acr.UpdateTime AS acr_UpdateTime,
         c.UpdateTime AS c_UpdateTime,
         a.UpdateTime AS a_UpdateTime
-    FROM bc_accountcontact ac
-    JOIN bc_accountcontactrole acr ON acr.AccountContactID = ac.ID
-    JOIN bctl_accountrole tlar ON tlar.ID = acr.Role
-    LEFT JOIN bc_contact c ON c.ID = ac.ContactID
-    LEFT JOIN bc_address a ON a.ID = c.PrimaryAddressID
-    LEFT JOIN bctl_state tls ON tls.ID = a.State
+    FROM {{ source('guidewire', 'bc_accountcontact') }} ac
+    JOIN {{ source('guidewire', 'bc_accountcontactrole') }} acr ON acr.AccountContactID = ac.ID
+    JOIN {{ source('guidewire', 'bctl_accountrole') }} tlar ON tlar.ID = acr.Role
+    LEFT JOIN {{ source('guidewire', 'bc_contact') }} c ON c.ID = ac.ContactID
+    LEFT JOIN {{ source('guidewire', 'bc_address') }} a ON a.ID = c.PrimaryAddressID
+    LEFT JOIN {{ source('guidewire', 'bctl_state') }} tls ON tls.ID = a.State
     WHERE tlar.TYPECODE = 'insured'
 ),
 
@@ -100,15 +100,15 @@ source_data AS (
         InsuredInfo.acr_UpdateTime,
         InsuredInfo.c_UpdateTime,
         InsuredInfo.a_UpdateTime
-    FROM bc_account dt
-    LEFT JOIN bctl_accounttype at ON at.ID = dt.AccountType
+    FROM {{ source('guidewire', 'bc_account') }} dt
+    LEFT JOIN {{ source('guidewire', 'bctl_accounttype') }} at ON at.ID = dt.AccountType
     LEFT JOIN ParentAcct ON ParentAcct.OwnerID = dt.ID
-    LEFT JOIN bctl_billinglevel bl ON bl.ID = dt.BillingLevel
-    LEFT JOIN bctl_customerservicetier cst ON cst.ID = dt.ServiceTier
-    LEFT JOIN bc_securityzone sz ON sz.ID = dt.SecurityZoneID
+    LEFT JOIN {{ source('guidewire', 'bctl_billinglevel') }} bl ON bl.ID = dt.BillingLevel
+    LEFT JOIN {{ source('guidewire', 'bctl_customerservicetier') }} cst ON cst.ID = dt.ServiceTier
+    LEFT JOIN {{ source('guidewire', 'bc_securityzone') }} sz ON sz.ID = dt.SecurityZoneID
     LEFT JOIN InsuredInfo ON InsuredInfo.AccountID = dt.ID
-    LEFT JOIN bctl_delinquencystatus tlds ON tlds.ID = dt.DelinquencyStatus
-    LEFT JOIN bctl_accountsegment bas ON bas.ID = dt.Segment
+    LEFT JOIN {{ source('guidewire', 'bctl_delinquencystatus') }} tlds ON tlds.ID = dt.DelinquencyStatus
+    LEFT JOIN {{ source('guidewire', 'bctl_accountsegment') }} bas ON bas.ID = dt.Segment
 )
 
 SELECT
