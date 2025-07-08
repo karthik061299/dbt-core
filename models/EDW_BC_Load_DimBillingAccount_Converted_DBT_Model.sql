@@ -1,27 +1,35 @@
 {{ config(
-    materialized='incremental',
-    unique_key='PublicID',
-    on_schema_change='fail',
-    pre_hook="INSERT INTO audit_log (package_name, status, timestamp) VALUES ('EDW_BC_Load_DimBillingAccount', 'Started', GETDATE())",
-    post_hook="INSERT INTO audit_log (package_name, status, timestamp) VALUES ('EDW_BC_Load_DimBillingAccount', 'Completed', GETDATE())"
+    materialized = 'incremental',
+    unique_key = 'PublicID',
+    on_schema_change = 'sync_all_columns',
+    database='DBT',
+    schema='GUIDEWIRE',
+    alias='EDW_BC_LOAD_DIMBILLINGACCOUNT'
 ) }}
 
--- DBT Model converted from SSIS Package: EDW_BC_Load_DimBillingAccount.dtsx
--- This model replicates the ETL logic for loading DimBillingAccount from Guidewire BC sources
--- Includes incremental upsert logic based on BeanVersion comparison
+-- 
+-- DBT Model: DimBillingAccount Incremental Upsert
+-- Converted from SSIS Package: EDW_BC_Load_DimBillingAccount.dtsx
+-- Source: GuideWire (multiple tables via complex CTEs)
+-- Target: DimBillingAccount
+-- Unique Key: PublicID
+-- LegacySourceSystem is always 'WC' (constant)
+-- BatchID is passed as a variable
+--
 
-WITH ParentAcct AS (
-    SELECT 
+WITH parent_acct AS(
+    SELECT
         pa.OwnerID,
         CAST(act.AccountNumber AS INT) AS ParentAccountNumber,
-        CONCAT(pa.BeanVersion, act.BeanVersion) AS BeanVersion,
-        act.UpdateTime
+        CONCAT(pa.BeanVersion, act.BeanVersion) AS ParentBeanVersion,
+        act.UpdateTime AS ParentUpdateTime
     FROM {{ source('guidewire', 'bc_ParentAcct') }} pa
-    JOIN {{ source('guidewire', 'bc_account') }} act ON act.ID = pa.ForeignEntityID
+    JOIN {{ source('guidewire', 'bc_account') }} act
+        ON act.ID = pa.ForeignEntityID
 ),
 
-InsuredInfo AS (
-    SELECT 
+insured_info AS (
+    SELECT
         ac.InsuredAccountID AS AccountID,
         c.FirstName,
         c.LastName,
@@ -31,38 +39,43 @@ InsuredInfo AS (
         a.City,
         a.PostalCode,
         tls.NAME AS State,
-        CONCAT(ac.BeanVersion, acr.BeanVersion, c.BeanVersion, a.BeanVersion) AS BeanVersion,
+        CONCAT(ac.BeanVersion, acr.BeanVersion, c.BeanVersion, a.BeanVersion) AS InsuredBeanVersion,
         ac.UpdateTime AS ac_UpdateTime,
         acr.UpdateTime AS acr_UpdateTime,
         c.UpdateTime AS c_UpdateTime,
         a.UpdateTime AS a_UpdateTime
     FROM {{ source('guidewire', 'bc_accountcontact') }} ac
-    JOIN {{ source('guidewire', 'bc_accountcontactrole') }} acr ON acr.AccountContactID = ac.ID
-    JOIN {{ source('guidewire', 'bctl_accountrole') }} tlar ON tlar.ID = acr.Role
-    LEFT JOIN {{ source('guidewire', 'bc_contact') }} c ON c.ID = ac.ContactID
-    LEFT JOIN {{ source('guidewire', 'bc_address') }} a ON a.ID = c.PrimaryAddressID
-    LEFT JOIN {{ source('guidewire', 'bctl_state') }} tls ON tls.ID = a.State
+    JOIN {{ source('guidewire', 'bc_accountcontactrole') }} acr
+        ON acr.AccountContactID = ac.ID
+    JOIN {{ source('guidewire', 'bctl_accountrole') }} tlar
+        ON tlar.ID = acr.Role
+    LEFT JOIN {{ source('guidewire', 'bc_contact') }} c
+        ON c.ID = ac.ContactID
+    LEFT JOIN {{ source('guidewire', 'bc_address') }} a
+        ON a.ID = c.PrimaryAddressID
+    LEFT JOIN {{ source('guidewire', 'bctl_state') }} tls
+        ON tls.ID = a.State
     WHERE tlar.TYPECODE = 'insured'
 ),
 
 source_data AS (
-    SELECT DISTINCT 
+    SELECT DISTINCT
         dt.AccountNumber,
         dt.AccountName,
         CAST(at.NAME AS VARCHAR(50)) AS AccountTypeName,
-        ParentAcct.ParentAccountNumber,
+        parent_acct.ParentAccountNumber,
         CAST(bl.NAME AS VARCHAR(100)) AS BillingLevelName,
         CAST(bas.NAME AS VARCHAR(50)) AS Segment,
         CAST(cst.NAME AS VARCHAR(50)) AS ServiceTierName,
         sz.Name AS SecurityZone,
-        InsuredInfo.FirstName,
-        InsuredInfo.LastName,
-        InsuredInfo.AddressLine1,
-        InsuredInfo.AddressLine2,
-        InsuredInfo.AddressLine3,
-        CAST(InsuredInfo.City AS VARCHAR(50)) AS City,
-        CAST(InsuredInfo.State AS VARCHAR(50)) AS State,
-        CAST(InsuredInfo.PostalCode AS VARCHAR(50)) AS PostalCode,
+        insured_info.FirstName,
+        insured_info.LastName,
+        insured_info.AddressLine1,
+        insured_info.AddressLine2,
+        insured_info.AddressLine3,
+        CAST(insured_info.City AS VARCHAR(50)) AS City,
+        CAST(insured_info.State AS VARCHAR(50)) AS State,
+        CAST(insured_info.PostalCode AS VARCHAR(50)) AS PostalCode,
         dt.CloseDate AS AccountCloseDate,
         dt.CreateTime AS AccountCreationDate,
         CAST(tlds.NAME AS VARCHAR(50)) AS DeliquencyStatusName,
@@ -70,34 +83,98 @@ source_data AS (
         dt.SecondTwicePerMthInvoiceDOM AS SecondTwicePerMonthInvoiceDayOfMonth,
         dt.PublicID,
         dt.ID AS GWRowNumber,
-        CAST(CONCAT(dt.BeanVersion, ParentAcct.BeanVersion, sz.BeanVersion) AS VARCHAR(20)) AS BeanVersion,
+        CAST(CONCAT(dt.BeanVersion, COALESCE(parent_acct.ParentBeanVersion, ''), COALESCE(sz.BeanVersion, '')) AS VARCHAR(50)) AS BeanVersion,
         CASE dt.Retired WHEN 0 THEN 1 ELSE 0 END AS IsActive,
         'WC' AS LegacySourceSystem,
-        {{ var('batch_id', 'DEFAULT_BATCH') }} AS BatchID,
-        GETDATE() AS DateCreated,
-        GETDATE() AS DateUpdated
+        -- Derived columns (equivalent to SSIS Derived Column transformation)
+        '{{ var("batch_id", "default_batch") }}' AS BatchID,
+        -- Update times for incremental filter (equivalent to SSIS parameterized query)
+        dt.UpdateTime AS dt_UpdateTime,
+        parent_acct.ParentUpdateTime,
+        sz.UpdateTime AS sz_UpdateTime,
+        insured_info.ac_UpdateTime,
+        insured_info.acr_UpdateTime,
+        insured_info.c_UpdateTime,
+        insured_info.a_UpdateTime
     FROM {{ source('guidewire', 'bc_account') }} dt
-    LEFT JOIN {{ source('guidewire', 'bctl_accounttype') }} at ON at.ID = dt.AccountType
-    LEFT JOIN ParentAcct ON ParentAcct.OwnerID = dt.ID
-    LEFT JOIN {{ source('guidewire', 'bctl_billinglevel') }} bl ON bl.ID = dt.BillingLevel
-    LEFT JOIN {{ source('guidewire', 'bctl_customerservicetier') }} cst ON cst.ID = dt.ServiceTier
-    LEFT JOIN {{ source('guidewire', 'bc_securityzone') }} sz ON sz.ID = dt.SecurityZoneID
-    LEFT JOIN InsuredInfo ON InsuredInfo.AccountID = dt.ID
-    LEFT JOIN {{ source('guidewire', 'bctl_delinquencystatus') }} tlds ON tlds.ID = dt.DelinquencyStatus
-    LEFT JOIN {{ source('guidewire', 'bctl_accountsegment') }} bas ON bas.ID = dt.Segment
-    WHERE (
-        dt.UpdateTime >= DATEADD(DAY, -{{ var('lookback_days', 7) }}, CAST(GETDATE() AS DATE)) OR
-        ParentAcct.UpdateTime >= DATEADD(DAY, -{{ var('lookback_days', 7) }}, CAST(GETDATE() AS DATE)) OR
-        sz.UpdateTime >= DATEADD(DAY, -{{ var('lookback_days', 7) }}, CAST(GETDATE() AS DATE)) OR
-        InsuredInfo.ac_UpdateTime >= DATEADD(DAY, -{{ var('lookback_days', 7) }}, CAST(GETDATE() AS DATE)) OR
-        InsuredInfo.acr_UpdateTime >= DATEADD(DAY, -{{ var('lookback_days', 7) }}, CAST(GETDATE() AS DATE)) OR
-        InsuredInfo.c_UpdateTime >= DATEADD(DAY, -{{ var('lookback_days', 7) }}, CAST(GETDATE() AS DATE)) OR
-        InsuredInfo.a_UpdateTime >= DATEADD(DAY, -{{ var('lookback_days', 7) }}, CAST(GETDATE() AS DATE))
-    )
+    LEFT JOIN {{ source('guidewire', 'bctl_accounttype') }} at
+        ON at.ID = dt.AccountType
+    LEFT JOIN parent_acct
+        ON parent_acct.OwnerID = dt.ID
+    LEFT JOIN {{ source('guidewire', 'bctl_billinglevel') }} bl
+        ON bl.ID = dt.BillingLevel
+    LEFT JOIN {{ source('guidewire', 'bctl_customerservicetier') }} cst
+        ON cst.ID = dt.ServiceTier
+    LEFT JOIN {{ source('guidewire', 'bc_securityzone') }} sz
+        ON sz.ID = dt.SecurityZoneID
+    LEFT JOIN insured_info
+        ON insured_info.AccountID = dt.ID
+    LEFT JOIN {{ source('guidewire', 'bctl_delinquencystatus') }} tlds
+        ON tlds.ID = dt.DelinquencyStatus
+    LEFT JOIN {{ source('guidewire', 'bctl_accountsegment') }} bas
+        ON bas.ID = dt.Segment
+    {% if is_incremental() %}
+    WHERE
+        (
+            dt.UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
+            OR parent_acct.ParentUpdateTime >= DATEADD(day, -7, CURRENT_DATE)
+            OR sz.UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
+            OR insured_info.ac_UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
+            OR insured_info.acr_UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
+            OR insured_info.c_UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
+            OR insured_info.a_UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
+        )
+    {% endif %}
+),
+
+-- Lookup existing DimBillingAccount records for upsert logic
+-- (equivalent to SSIS Lookup transformation)
+{% if is_incremental() %}
+  -- If the model is running incrementally, query the existing table
+  existing_dim AS (
+    SELECT
+        PublicID,
+        BeanVersion AS EDWBeanVersion
+    FROM {{ this }} -- This resolves to DBT.DBT_GUIDEWIRE.EDW_BC_LOAD_DIMBILLINGACCOUNT
+      WHERE LegacySourceSystem = 'WC'
+  ),
+{% else %}
+  -- On a full-refresh or the very first run, create a dummy CTE 
+  -- so the downstream JOIN doesn't fail.
+  existing_dim AS (
+    SELECT
+      CAST(NULL AS VARCHAR) AS PublicID,
+      CAST(NULL AS VARCHAR) AS EDWBeanVersion
+    WHERE 1=0 -- Ensures no rows are returned
+  ),
+{% endif %}
+
+-- Join source to existing to determine insert/update
+-- (equivalent to SSIS Lookup transformation with match/no match outputs)
+joined AS (
+    SELECT
+        s.*,
+        e.EDWBeanVersion
+    FROM source_data s
+    LEFT JOIN existing_dim e
+        ON s.PublicID = e.PublicID
+),
+
+-- Split logic equivalent to SSIS Conditional Split transformation:
+--   - If EDWBeanVersion is null, it's an insert (new record)
+--   - If BeanVersion != EDWBeanVersion, it's an update (changed record)
+--   - If BeanVersion == EDWBeanVersion, it's unchanged (skip)
+to_upsert AS (
+    SELECT *
+    FROM joined
+    WHERE
+        EDWBeanVersion IS NULL -- insert
+        OR BeanVersion != EDWBeanVersion -- update
 )
 
-SELECT 
-    PublicID,
+-- Final SELECT with all columns for the target table
+-- (equivalent to SSIS OLEDB Destination)
+SELECT
     AccountNumber,
     AccountName,
     AccountTypeName,
@@ -119,22 +196,26 @@ SELECT
     DeliquencyStatusName,
     FirstTwicePerMonthInvoiceDayOfMonth,
     SecondTwicePerMonthInvoiceDayOfMonth,
+    PublicID,
     GWRowNumber,
     BeanVersion,
     IsActive,
     LegacySourceSystem,
-    BatchID,
-    DateCreated,
-    DateUpdated
-FROM source_data
+    BatchID
+FROM to_upsert
 
-{% if is_incremental() %}
-    -- Incremental logic: only process records that are new or have changed BeanVersion
-    WHERE PublicID NOT IN (
-        SELECT PublicID 
-        FROM {{ this }} 
-        WHERE BeanVersion = source_data.BeanVersion
-    )
-{% endif %}
-
-ORDER BY PublicID
+-- 
+-- CONVERSION NOTES:
+-- 1. SSIS Row Count transformations are replaced by DBT run results and logging
+-- 2. SSIS Execute SQL Tasks for process initiation/completion are handled by DBT hooks if needed
+-- 3. SSIS Error handling is managed by DBT's built-in error handling and logging
+-- 4. SSIS Variables (SourceCount, UpdateCount, InsertCount, UnChangeCount) are replaced by DBT run statistics
+-- 5. SSIS OLEDB Command for updates is replaced by DBT's incremental upsert logic
+-- 6. SSIS Precedence Constraints are replaced by DBT's dependency management
+--
+-- MANUAL INTERVENTION REQUIRED:
+-- - Review and configure appropriate DBT variables for batch_id
+-- - Set up proper source configurations in sources.yml
+-- - Configure appropriate incremental strategy based on data volume and requirements
+-- - Review and adjust the incremental filter date range (-7 days) as needed
+--
