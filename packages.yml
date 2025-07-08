@@ -1,4 +1,5 @@
 # packages.yml
+
 packages:
   - package: dbt-labs/fivetran_utils
-    version: 0.4.0 # Or a more recent version
+    version: [0.4.0, <0.5.0] # Using a version range is best practice
