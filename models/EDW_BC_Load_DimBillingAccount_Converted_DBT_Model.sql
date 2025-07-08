@@ -1,22 +1,23 @@
 {{ config(
-    materialized = 'incremental',
-    unique_key = 'PublicID',
-    on_schema_change = 'sync_all_columns',
+    materialized='incremental',
+    unique_key='PublicID',
+    on_schema_change='sync_all_columns',
     database='DBT',
     schema='GUIDEWIRE',
-    alias='EDW_BC_LOAD_DIMBILLINGACCOUNTS'
+    alias='EDW_BC_LOAD_DIMBILLINGACCOUNT'
 ) }}
 
--- 
+--
 -- DBT Model: DimBillingAccount Incremental Upsert
--- Source: GuideWire (multiple tables via complex CTEs)
+-- Converted from SSIS Package: EDW_BC_Load_DimBillingAccount.dtsx
+-- Source: GuideWire BC (multiple tables via complex CTEs)
 -- Target: DimBillingAccount
 -- Unique Key: PublicID
--- LegacySourceSystem is always 'WC' (constant)
+-- LegacySourceSystem is always 'WC' (Workers Comp)
 -- BatchID is passed as a variable
 --
 
-WITH parent_acct AS(
+WITH parent_acct AS (
     SELECT
         pa.OwnerID,
         CAST(act.AccountNumber AS INT) AS ParentAccountNumber,
@@ -82,10 +83,14 @@ source_data AS (
         dt.SecondTwicePerMthInvoiceDOM AS SecondTwicePerMonthInvoiceDayOfMonth,
         dt.PublicID,
         dt.ID AS GWRowNumber,
-        CAST(CONCAT(dt.BeanVersion, COALESCE(parent_acct.ParentBeanVersion, ''), COALESCE(sz.BeanVersion, '')) AS VARCHAR(50)) AS BeanVersion,
+        CAST(CONCAT(
+            dt.BeanVersion,
+            COALESCE(parent_acct.ParentBeanVersion, ''),
+            COALESCE(sz.BeanVersion, '')
+        ) AS VARCHAR(20)) AS BeanVersion,
         CASE dt.Retired WHEN 0 THEN 1 ELSE 0 END AS IsActive,
         'WC' AS LegacySourceSystem,
-        -- Derived columns
+        -- Derived columns (equivalent to SSIS Derived Column transformation)
         '{{ var("batch_id", "default_batch") }}' AS BatchID,
         -- Update times for incremental filter
         dt.UpdateTime AS dt_UpdateTime,
@@ -113,6 +118,7 @@ source_data AS (
     LEFT JOIN {{ source('guidewire', 'bctl_accountsegment') }} bas
         ON bas.ID = dt.Segment
     {% if is_incremental() %}
+    -- Incremental filter (equivalent to SSIS parameterized date filter)
     WHERE
         (
             dt.UpdateTime >= DATEADD(day, -7, CURRENT_DATE)
@@ -127,28 +133,27 @@ source_data AS (
 ),
 
 -- Lookup existing DimBillingAccount records for upsert logic
+-- (equivalent to SSIS Lookup transformation)
 {% if is_incremental() %}
-  -- If the model is running incrementally, query the existing table
-  existing_dim AS (
+existing_dim AS (
     SELECT
         PublicID,
         BeanVersion AS EDWBeanVersion
-    FROM {{ this }} -- This resolves to DBT.DBT_GUIDEWIRE.EDW_BC_LOAD_DIMBILLINGACCONT
-      WHERE LegacySourceSystem = 'WC'
-  ),
+    FROM {{ this }}
+    WHERE LegacySourceSystem = 'WC'
+),
 {% else %}
-  -- On a full-refresh or the very first run, create a dummy CTE 
-  -- so the downstream JOIN doesn't fail.
-  existing_dim AS (
+-- On full-refresh or first run, create empty CTE
+existing_dim AS (
     SELECT
-      CAST(NULL AS VARCHAR) AS PublicID,
-      CAST(NULL AS VARCHAR) AS EDWBeanVersion
-    WHERE 1=0 -- Ensures no rows are returned
-  ),
+        CAST(NULL AS VARCHAR) AS PublicID,
+        CAST(NULL AS VARCHAR) AS EDWBeanVersion
+    WHERE 1=0
+),
 {% endif %}
 
-
 -- Join source to existing to determine insert/update
+-- (equivalent to SSIS Conditional Split transformation)
 joined AS (
     SELECT
         s.*,
@@ -158,10 +163,10 @@ joined AS (
         ON s.PublicID = e.PublicID
 ),
 
--- Split logic: 
---   - If EDWBeanVersion is null, it's an insert (new record)
---   - If BeanVersion != EDWBeanVersion, it's an update (changed record)
---   - If BeanVersion == EDWBeanVersion, it's unchanged (skip)
+-- Split logic equivalent to SSIS Conditional Split:
+-- - If EDWBeanVersion is null, it's an insert (new record)
+-- - If BeanVersion != EDWBeanVersion, it's an update (changed record)
+-- - If BeanVersion == EDWBeanVersion, it's unchanged (skip)
 to_upsert AS (
     SELECT *
     FROM joined
@@ -170,6 +175,8 @@ to_upsert AS (
         OR BeanVersion != EDWBeanVersion -- update
 )
 
+-- Final SELECT with all required columns
+-- (equivalent to SSIS OLEDB Destination)
 SELECT
     AccountNumber,
     AccountName,
@@ -200,16 +207,17 @@ SELECT
     BatchID
 FROM to_upsert
 
-
--- {% if is_incremental() %}
--- -- Only process records that are new or have changed BeanVersion
--- {% endif %}
-
-
-
--- 
--- Row count and audit logic from SSIS is omitted (handled by DBT run results and logging)
--- 
--- TODO: Manual Intervention Required: If any Script Tasks or custom .NET code existed in SSIS, review and port logic here.
 --
--- End of DBT model for DimBillingAccount incremental upsert
+-- CONVERSION NOTES:
+-- 1. SSIS Row Count transformations are replaced by DBT run results and logging
+-- 2. SSIS OLEDB Command (UPDATE) is handled by DBT incremental materialization
+-- 3. SSIS Control Flow error handling is replaced by DBT's built-in error handling
+-- 4. SSIS Variables are replaced by DBT variables and Jinja templating
+-- 5. SSIS Event Handlers are replaced by DBT hooks and on-run-end macros if needed
+--
+-- MANUAL INTERVENTION REQUIRED:
+-- - Review batch_id variable configuration in dbt_project.yml
+-- - Verify source table names and schema references
+-- - Test incremental logic with sample data
+-- - Configure appropriate DBT hooks for error logging if needed
+--
