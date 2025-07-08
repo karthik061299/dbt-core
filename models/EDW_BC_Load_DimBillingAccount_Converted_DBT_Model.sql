@@ -1,5 +1,5 @@
 {{ config(
-    materialized='merge',
+    materialized='incremental',
     unique_key='PublicID',
     on_schema_change='fail',
     merge_update_columns=[
