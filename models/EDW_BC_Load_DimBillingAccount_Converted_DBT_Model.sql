@@ -4,7 +4,7 @@
     on_schema_change = 'sync_all_columns',
     database='DBT',
     schema='GUIDEWIRE',
-    alias='EDW_BC_LOAD_DIMBILLINGACCONT'
+    alias='EDW_BC_LOAD_DIMBILLINGACCOUNTS'
 ) }}
 
 -- 
