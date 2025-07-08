@@ -1,25 +1,23 @@
 {{ config(
     materialized='incremental',
-    unique_key=['PublicID', 'LegacySourceSystem'],
+    unique_key='PublicID',
     on_schema_change='sync_all_columns'
 ) }}
 
 --
--- DBT Model: EDW_BC_Load_DimBillingAccount_Converted_DBT_Model.sql
--- Source: SSIS Package 'EDW_BC_Load_DimBillingAccount'
--- Description: Incremental load of DimBillingAccount with SCD1-like logic, using batch and BeanVersion for change detection.
+-- Model: DimBillingAccount incremental upsert from Guidewire BC sources
+-- Source: OLE_SRC - GuideWire (see schema.yml for column docs)
 --
 
-{% set batch_id = var('batch_id', 'auto_batch') %}
-{% set days_back = var('days_back', -1) %}
+{% set batch_id = var('batch_id', 'BATCH_PLACEHOLDER') %}
 
 with ParentAcct as (
     select pa.OwnerID,
            cast(act.AccountNumber as int) as ParentAccountNumber,
            concat(pa.BeanVersion, act.BeanVersion) as BeanVersion,
            act.UpdateTime
-    from {{ source('bc', 'ParentAcct') }} pa
-    join {{ source('bc', 'account') }} act on act.ID = pa.ForeignEntityID
+      from {{ source('guidewire', 'bc_ParentAcct') }} pa
+      join {{ source('guidewire', 'bc_account') }} act on act.ID = pa.ForeignEntityID
 ),
 InsuredInfo as (
     select ac.InsuredAccountID as AccountID,
@@ -29,14 +27,15 @@ InsuredInfo as (
            concat(ac.BeanVersion, acr.BeanVersion, c.BeanVersion, a.BeanVersion) as BeanVersion,
            ac.UpdateTime as ac_UpdateTime, acr.UpdateTime as acr_UpdateTime,
            c.UpdateTime as c_UpdateTime, a.UpdateTime as a_UpdateTime
-    from {{ source('bc', 'accountcontact') }} ac
-    join {{ source('bc', 'accountcontactrole') }} acr on acr.AccountContactID = ac.ID
-    join {{ source('bctl', 'accountrole') }} tlar on tlar.ID = acr.Role
-    left join {{ source('bc', 'contact') }} c on c.ID = ac.ContactID
-    left join {{ source('bc', 'address') }} a on a.ID = c.PrimaryAddressID
-    left join {{ source('bctl', 'state') }} tls on tls.ID = a.State
-    where tlar.TYPECODE = 'insured'
-),
+      from {{ source('guidewire', 'bc_accountcontact') }} ac
+      join {{ source('guidewire', 'bc_accountcontactrole') }} acr on acr.AccountContactID = ac.ID
+      join {{ source('guidewire', 'bctl_accountrole') }} tlar on tlar.ID = acr.Role
+      left join {{ source('guidewire', 'bc_contact') }} c on c.ID = ac.ContactID
+      left join {{ source('guidewire', 'bc_address') }} a on a.ID = c.PrimaryAddressID
+      left join {{ source('guidewire', 'bctl_state') }} tls on tls.ID = a.State
+     where tlar.TYPECODE = 'insured'
+)
+,
 source_data as (
     select distinct
         dt.AccountNumber,
@@ -63,74 +62,50 @@ source_data as (
         case dt.Retired when 0 then 1 else 0 end as IsActive,
         'WC' as LegacySourceSystem,
         '{{ batch_id }}' as BatchID
-    from {{ source('bc', 'account') }} dt
-    left join {{ source('bctl', 'accounttype') }} at on at.ID = dt.AccountType
+    from {{ source('guidewire', 'bc_account') }} dt
+    left join {{ source('guidewire', 'bctl_accounttype') }} at on at.ID = dt.AccountType
     left join ParentAcct on ParentAcct.OwnerID = dt.ID
-    left join {{ source('bctl', 'billinglevel') }} bl on bl.ID = dt.BillingLevel
-    left join {{ source('bctl', 'customerservicetier') }} cst on cst.ID = dt.ServiceTier
-    left join {{ source('bc', 'securityzone') }} sz on sz.ID = dt.SecurityZoneID
+    left join {{ source('guidewire', 'bctl_billinglevel') }} bl on bl.ID = dt.BillingLevel
+    left join {{ source('guidewire', 'bctl_customerservicetier') }} cst on cst.ID = dt.ServiceTier
+    left join {{ source('guidewire', 'bc_securityzone') }} sz on sz.ID = dt.SecurityZoneID
     left join InsuredInfo on InsuredInfo.AccountID = dt.ID
-    left join {{ source('bctl', 'delinquencystatus') }} tlds on tlds.ID = dt.DelinquencyStatus
-    left join {{ source('bctl', 'accountsegment') }} bas on bas.ID = dt.Segment
+    left join {{ source('guidewire', 'bctl_delinquencystatus') }} tlds on tlds.ID = dt.DelinquencyStatus
+    left join {{ source('guidewire', 'bctl_accountsegment') }} bas on bas.ID = dt.Segment
     where (
-        dt.UpdateTime >= dateadd(day, {{ days_back }}, cast(current_date as date)) or
-        ParentAcct.UpdateTime >= dateadd(day, {{ days_back }}, cast(current_date as date)) or
-        sz.UpdateTime >= dateadd(day, {{ days_back }}, cast(current_date as date)) or
-        InsuredInfo.ac_UpdateTime >= dateadd(day, {{ days_back }}, cast(current_date as date)) or
-        InsuredInfo.acr_UpdateTime >= dateadd(day, {{ days_back }}, cast(current_date as date)) or
-        InsuredInfo.c_UpdateTime >= dateadd(day, {{ days_back }}, cast(current_date as date)) or
-        InsuredInfo.a_UpdateTime >= dateadd(day, {{ days_back }}, cast(current_date as date))
+        dt.UpdateTime >= dateadd(day, -1, cast(current_date as date)) or
+        ParentAcct.UpdateTime >= dateadd(day, -1, cast(current_date as date)) or
+        sz.UpdateTime >= dateadd(day, -1, cast(current_date as date)) or
+        InsuredInfo.ac_UpdateTime >= dateadd(day, -1, cast(current_date as date)) or
+        InsuredInfo.acr_UpdateTime >= dateadd(day, -1, cast(current_date as date)) or
+        InsuredInfo.c_UpdateTime >= dateadd(day, -1, cast(current_date as date)) or
+        InsuredInfo.a_UpdateTime >= dateadd(day, -1, cast(current_date as date))
     )
-),
+)
+,
 lookup_existing as (
-    select PublicID, BeanVersion, LegacySourceSystem
+    select PublicID, BeanVersion as EDWBeanVersion
     from {{ this }}
 )
-
-select
-    src.AccountNumber,
-    src.AccountName,
-    src.AccountTypeName,
-    src.ParentAccountNumber,
-    src.BillingLevelName,
-    src.Segment,
-    src.ServiceTierName,
-    src.SecurityZone,
-    src.FirstName,
-    src.LastName,
-    src.AddressLine1,
-    src.AddressLine2,
-    src.AddressLine3,
-    src.City,
-    src.State,
-    src.PostalCode,
-    src.AccountCloseDate,
-    src.AccountCreationDate,
-    src.DeliquencyStatusName,
-    src.FirstTwicePerMonthInvoiceDayOfMonth,
-    src.SecondTwicePerMonthInvoiceDayOfMonth,
-    src.PublicID,
-    src.GWRowNumber,
-    src.BeanVersion,
-    src.IsActive,
-    src.LegacySourceSystem,
-    src.BatchID,
-    current_timestamp as DateUpdated
-from source_data src
-left join lookup_existing tgt
-    on src.PublicID = tgt.PublicID and src.LegacySourceSystem = tgt.LegacySourceSystem
-where (
-    tgt.PublicID is null -- Insert
-    or tgt.BeanVersion != src.BeanVersion -- Update
+,
+final as (
+    select
+        s.*
+    from source_data s
+    left join lookup_existing lkp
+      on s.PublicID = lkp.PublicID
+    where (
+        lkp.EDWBeanVersion is null -- new record
+        or s.BeanVersion != lkp.EDWBeanVersion -- changed record
+    )
 )
 
+select * from final
+
 {% if is_incremental() %}
-    -- Only update/insert changed or new records
+    -- Update logic handled by dbt incremental merge
 {% endif %}
 
 --
 -- Notes:
--- - This model implements incremental upsert logic based on PublicID + LegacySourceSystem and BeanVersion.
--- - Use dbt run with --vars '{"batch_id": 12345, "days_back": -1}' for parameterization.
--- - Row counts for auditing can be implemented in dbt tests or exposures.
--- - Error logging and process state management should be handled outside dbt (e.g., orchestration layer).
+-- - Row count and error logging logic from SSIS is not implemented here; consider dbt artifacts or downstream reporting for row counts.
+-- - All business logic is preserved; non-SQL/script tasks are not present in this package.
