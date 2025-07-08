@@ -1,34 +1,11 @@
 {{ config(
     materialized='incremental',
     unique_key='PublicID',
-    on_schema_change='fail',
-    merge_update_columns=[
-        'DateUpdated',
-        'AccountCloseDate',
-        'AccountCreationDate',
-        'AccountName',
-        'AccountNumber',
-        'AccountTypeName',
-        'AddressLine1',
-        'AddressLine2',
-        'AddressLine3',
-        'BatchId',
-        'BeanVersion',
-        'BillingLevelName',
-        'City',
-        'DeliquencyStatusName',
-        'FirstName',
-        'GWRowNumber',
-        'IsActive',
-        'LastName',
-        'ParentAccountNumber',
-        'PostalCode',
-        'SecurityZone',
-        'Segment',
-        'ServiceTierName',
-        'State'
-    ]
+    on_schema_change='fail'
 ) }}
+
+-- DBT Model converted from SSIS Package: EDW_BC_Load_DimBillingAccount.dtsx
+-- This model replicates the ETL logic for loading DimBillingAccount dimension
 
 WITH ParentAcct AS (
     SELECT 
@@ -93,13 +70,8 @@ source_data AS (
         CAST(CONCAT(dt.BeanVersion, ParentAcct.BeanVersion, sz.BeanVersion) AS VARCHAR(20)) AS BeanVersion,
         CASE dt.Retired WHEN 0 THEN 1 ELSE 0 END AS IsActive,
         'WC' AS LegacySourceSystem,
-        dt.UpdateTime,
-        ParentAcct.UpdateTime AS ParentAcct_UpdateTime,
-        sz.UpdateTime AS sz_UpdateTime,
-        InsuredInfo.ac_UpdateTime,
-        InsuredInfo.acr_UpdateTime,
-        InsuredInfo.c_UpdateTime,
-        InsuredInfo.a_UpdateTime
+        CURRENT_TIMESTAMP AS DateUpdated,
+        {{ var('batch_id', 1) }} AS BatchId
     FROM {{ source('guidewire', 'bc_account') }} dt
     LEFT JOIN {{ source('guidewire', 'bctl_accounttype') }} at ON at.ID = dt.AccountType
     LEFT JOIN ParentAcct ON ParentAcct.OwnerID = dt.ID
@@ -109,48 +81,57 @@ source_data AS (
     LEFT JOIN InsuredInfo ON InsuredInfo.AccountID = dt.ID
     LEFT JOIN {{ source('guidewire', 'bctl_delinquencystatus') }} tlds ON tlds.ID = dt.DelinquencyStatus
     LEFT JOIN {{ source('guidewire', 'bctl_accountsegment') }} bas ON bas.ID = dt.Segment
+    WHERE (
+        {% if is_incremental() %}
+            dt.UpdateTime >= DATEADD(DAY, {{ var('days_back', -7) }}, CAST(GETDATE() AS DATE)) OR
+            ParentAcct.UpdateTime >= DATEADD(DAY, {{ var('days_back', -7) }}, CAST(GETDATE() AS DATE)) OR
+            sz.UpdateTime >= DATEADD(DAY, {{ var('days_back', -7) }}, CAST(GETDATE() AS DATE)) OR
+            InsuredInfo.ac_UpdateTime >= DATEADD(DAY, {{ var('days_back', -7) }}, CAST(GETDATE() AS DATE)) OR
+            InsuredInfo.acr_UpdateTime >= DATEADD(DAY, {{ var('days_back', -7) }}, CAST(GETDATE() AS DATE)) OR
+            InsuredInfo.c_UpdateTime >= DATEADD(DAY, {{ var('days_back', -7) }}, CAST(GETDATE() AS DATE)) OR
+            InsuredInfo.a_UpdateTime >= DATEADD(DAY, {{ var('days_back', -7) }}, CAST(GETDATE() AS DATE))
+        {% else %}
+            1=1  -- Full refresh loads all data
+        {% endif %}
+    )
 )
 
-SELECT
-    s.AccountNumber,
-    s.AccountName,
-    s.AccountTypeName,
-    s.ParentAccountNumber,
-    s.BillingLevelName,
-    s.Segment,
-    s.ServiceTierName,
-    s.SecurityZone,
-    s.FirstName,
-    s.LastName,
-    s.AddressLine1,
-    s.AddressLine2,
-    s.AddressLine3,
-    s.City,
-    s.State,
-    s.PostalCode,
-    s.AccountCloseDate,
-    s.AccountCreationDate,
-    s.DeliquencyStatusName,
-    s.FirstTwicePerMonthInvoiceDayOfMonth,
-    s.SecondTwicePerMonthInvoiceDayOfMonth,
-    s.PublicID,
-    s.GWRowNumber,
-    s.BeanVersion,
-    s.IsActive,
-    s.LegacySourceSystem,
-    {{ var('batch_id', 'default_batch_id') }} as BatchID,
-    GETDATE() as DateUpdated
-FROM source_data s
+SELECT 
+    AccountNumber,
+    AccountName,
+    AccountTypeName,
+    ParentAccountNumber,
+    BillingLevelName,
+    Segment,
+    ServiceTierName,
+    SecurityZone,
+    FirstName,
+    LastName,
+    AddressLine1,
+    AddressLine2,
+    AddressLine3,
+    City,
+    State,
+    PostalCode,
+    AccountCloseDate,
+    AccountCreationDate,
+    DeliquencyStatusName,
+    FirstTwicePerMonthInvoiceDayOfMonth,
+    SecondTwicePerMonthInvoiceDayOfMonth,
+    PublicID,
+    GWRowNumber,
+    BeanVersion,
+    IsActive,
+    LegacySourceSystem,
+    DateUpdated,
+    BatchId
+FROM source_data
 
 {% if is_incremental() %}
-
-WHERE
-    s.UpdateTime >= (select max(DateUpdated) from {{ this }}) OR
-    s.ParentAcct_UpdateTime >= (select max(DateUpdated) from {{ this }}) OR
-    s.sz_UpdateTime >= (select max(DateUpdated) from {{ this }}) OR
-    s.ac_UpdateTime >= (select max(DateUpdated) from {{ this }}) OR
-    s.acr_UpdateTime >= (select max(DateUpdated) from {{ this }}) OR
-    s.c_UpdateTime >= (select max(DateUpdated) from {{ this }}) OR
-    s.a_UpdateTime >= (select max(DateUpdated) from {{ this }})
-
+    -- Incremental logic: only process records that have changed or are new
+    WHERE PublicID NOT IN (
+        SELECT PublicID 
+        FROM {{ this }} 
+        WHERE BeanVersion = source_data.BeanVersion
+    )
 {% endif %}
