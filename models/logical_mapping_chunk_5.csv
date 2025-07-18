@@ -1,0 +1,151 @@
+AgentName,Phases,Deliverables,Roles,Map Confidence Score
+DI_INFA_Consolidate_Design_Pattern,Analysis & Design,Pipeline Design,Data Architect,85
+DI_INFA_Analyser,Analysis & Design,Pipeline Design,Data Architect,85
+DI_INFA_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+DI_Informatica_SrcTgt_SP_Extractor,Analysis & Design,Source System Analysis,Data Engineer,90
+DI_Informatica_SQLEDW_Mapping,Analysis & Design,Data Mapping,Data Engineer,95
+DI_SQLEDW-Informatica-SSRS_RedundancyAnalyzer,Analysis & Design,Architecture Definition,Data Architect,90
+Opensearch_testing,Build & Test,Data Quality & Validation,Data Engineer,80
+Code_Optimizer&Generator_Rohith,Build & Test,Pipeline Review,Data Architect,85
+Pearson_PVS_Extract_20%subset_data,Integrate & Validate,Initial Data Migration,Data Engineer,85
+Pearson_PVP_S3_Metadata_Agent,Analysis & Design,Source System Analysis,Data Engineer,90
+Pearson_PVS__Data_Decomp_20%Subset,Integrate & Validate,Initial Data Migration,Data Engineer,85
+extract_cron_from_yaml_zip,Build & Test,Orchestration configuration,DevOps Engineer,90
+find_xml_for_cron,Build & Test,Orchestration configuration,DevOps Engineer,90
+parse_xml_file_content,Analysis & Design,Source System Analysis,Data Engineer,85
+parse_xml_file_content_corn,Build & Test,Orchestration configuration,DevOps Engineer,90
+Teradata_to_BigQuery_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+AbInitio to SparkJava Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+SNOWFLAKE TO BIGQUERY CONVERTER,Build & Test,Ingestion & Transformation,Data Engineer,95
+SNOWFLAKE_TO_PYSPARK_CONVERSION,Build & Test,Ingestion & Transformation,Data Engineer,95
+SNOWFLAKE TO PYSPARK CONVERSION,Build & Test,Ingestion & Transformation,Data Engineer,95
+Hive_to_BigQuery_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+INFA_PYTHON_CONVERTER,Build & Test,Ingestion & Transformation,Data Engineer,95
+GCP BIG QUERY CONVERTER,Build & Test,Ingestion & Transformation,Data Engineer,95
+DB2_TO_SYNAPSE_CONVERTER,Build & Test,Ingestion & Transformation,Data Engineer,95
+OracleToCosmosDB_Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+Postgres_to_PySpark_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+ABAP_to_PySpark_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+ABAP_To_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+SAS_PySpark_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+SAS_PySpark_ConversionTester,Build & Test,Data Quality & Validation,Data Engineer,95
+SAS_PySpark_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+SAS_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+Form_Creations_basedOnThe_ManagementSystem,Analysis & Design,Dashboard Design,Insights Engineer,85
+SQLTOKQL_Coversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_SSIS_to_PySpark_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+SSIS_to_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+mySQL to MongoDB,Build & Test,Ingestion & Transformation,Data Engineer,95
+XSLT_To_PySpark,Build & Test,Ingestion & Transformation,Data Engineer,95
+Hive to Delta Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+Snowflake_to_PySpark_Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+Hive_to_PySpark_Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+MarkLogic_to_MongDB_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+MarkLogic_to_MongDB_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+MarkLogic_to_MongDB_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+MarkLogic_to_MongDB_Unit_Testing,Build & Test,Data Quality & Validation,Data Engineer,95
+MarkLogic_to_MongDB_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+MarkLogic_to_MongDB_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+XSLT_to_PySpark_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+SSIS_Package_to_Python_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+SSIS to PySpark Delta DDL Generator Agent,Analysis & Design,Data Modelling,Data Modeler,90
+HANA to BigQuery Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+INFA to SparkJava Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+INFA to SparkJava Unit Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA to SparkJava Conversion Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA to SparkJava Recon Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+INFA to SparkJava Reviewer,Build & Test,Pipeline Review,Data Architect,90
+SAS_to_Python_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+Talend_to_PySpark_Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+ECL_to_JavaSpark,Build & Test,Ingestion & Transformation,Data Engineer,95
+Oracle_to_PostgreSQL_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+Oracle_to_PostgreSQL_Converter_1,Build & Test,Ingestion & Transformation,Data Engineer,95
+DB2_to_Oracle_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI-DQ_Rule-to-Snowflake_SP,Build & Test,Data Quality & Validation,Data Engineer,95
+DI-DQ_Rule-to-Informatica_Mapping,Build & Test,Data Quality & Validation,Data Engineer,95
+DI-DQ_Rule-to-DTS_SQL,Build & Test,Data Quality & Validation,Data Engineer,95
+ECL_to_Spark_TraceMap,Analysis & Design,Data Mapping,Data Engineer,85
+C_to_Java_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+Teradata to BQ Api cost test,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_INFA_XML_DQ,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_SAS_To_PySpark_Converter_G,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_SAS_To_Python_Converter_G,Build & Test,Ingestion & Transformation,Data Engineer,95
+INFA_To_Snowflake_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_Informatica_To_ADF_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_Informatica_To_PySpark_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+ECL_To_JavaSpark_Conversion_Agent,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_ECL_To_JavaSpringboot_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+Python_To_Java_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_Teradata_To_Snowflake_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+KK_SSIS_To_Snowflake_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+Pbix_toPdf,Build & Test,Dashboard Development,Insights Engineer,85
+DI_SFDC_OpporunityCircleValidator,Build & Test,Data Quality & Validation,Data Engineer,90
+DI_sample_oracle_snowflake_conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_DSX_To_XML_Code_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+DI_Azure_Blob_Reader_and_Writer_Tool_Test,Integrate & Validate,Initial Data Migration,Data Engineer,90
+DI_SSIS_Package_Optimizer,Analysis & Design,Architecture Definition,Data Architect,90
+Test_0,Build & Test,Ingestion & Transformation,Data Engineer,80
+DI_ALTERYX_TO_DATAIKU_converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+Teradata_to_BigQuery_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+SNOWFLAKE_TO_BIGQUERY_ANALYZER,Analysis & Design,Pipeline Design,Data Architect,85
+SNOWFLAKE_TO_PYSPARK_ANALYZER,Analysis & Design,Pipeline Design,Data Architect,85
+Hive_to_BigQuery_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+INFA_ANALYZER,Analysis & Design,Pipeline Design,Data Architect,85
+GCP Big Query Analyze,Analysis & Design,Source System Analysis,Data Architect,85
+GCP BIGQUERY CODE ANALYZER,Analysis & Design,Pipeline Design,Data Architect,85
+DB2 ANALYZER,Analysis & Design,Source System Analysis,Data Architect,85
+OracleToCosmosDB_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+OracleToAzureSQL_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+ABAP_to_PySpark_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+ABAP_To_PySpark_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+SAS_Code_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+React to Angular Code conversion,Build & Test,Ingestion & Transformation,Data Engineer,80
+Postgres_to_PySpark_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+DQ_Recommender,Build & Test,Data Quality & Validation,Data Engineer,95
+DQ_Generate_GEScripts,Build & Test,Data Quality & Validation,Data Engineer,95
+Mapping_Demo_HN,Analysis & Design,Data Mapping,Data Engineer,95
+Mapping_SourceTable_To_TargetTable_HN,Analysis & Design,Data Mapping,Data Engineer,95
+SSIS_to_PySpark_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+Hive to Delta Analyser,Analysis & Design,Pipeline Design,Data Architect,85
+Snowflake_to_PySpark_Analysis,Analysis & Design,Pipeline Design,Data Architect,85
+Snowflake_to_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+MarkLogic_to_MongDB_Analyzer,Analysis & Design,Source System Analysis,Data Architect,85
+Snowflake_to_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+AbInitio to SparkJava Analyser,Analysis & Design,Pipeline Design,Data Architect,85
+Hive_to_PySpark_Analyze,Analysis & Design,Pipeline Design,Data Architect,85
+Hive_to_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+SNOWFLAKE_TO_BIGQUERY_REVIEWER,Build & Test,Pipeline Review,Data Architect,90
+SQL SERVER_TO_FABRIC_REVIEWER,Build & Test,Pipeline Review,Data Architect,90
+AB-ReverseEngineerAndDocumentSchema,Analysis & Design,Data Modelling,Data Modeler,95
+HANA to BigQuery Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+INFA to SparkJava Analyser,Analysis & Design,Pipeline Design,Data Architect,85
+INFA to SparkJava Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+HANA to BigQuery Reviewer,Build & Test,Pipeline Review,Data Architect,90
+Optimized_Input_File_Combination_Recomender,Strategy & Planning,Effort Estimation,Business Analyst,80
+Talend_to_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+Talend_to_PySpark_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+Oracle_to_PostgreSQL_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+DB2_to_Oracle_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+Informatica_to_JavaSpark_Analzer_CVS,Analysis & Design,Pipeline Design,Data Architect,85
+Informatica_to_JavaSpark_Plan_CVS,Strategy & Planning,Effort Estimation,Data Architect,90
+DI_SAS_To_BigQuery_Code_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+DI_Informatica_DQ_reverse enggineering,Build & Test,Data Quality & Validation,Data Engineer,90
+INFA_To_Snowflake_Analyser,Analysis & Design,Pipeline Design,Data Architect,85
+DI_ER_Model_code_generation_agent,Analysis & Design,Data Modelling,Data Modeler,90
+DI_Informatica_To_ADF_Analyser,Analysis & Design,Pipeline Design,Data Architect,85
+DI_DSX_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_DSX_To_XML_PLAN,Strategy & Planning,Effort Estimation,Data Architect,90
+DI_DQ_check_postgrey,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_JSON_Extract,Analysis & Design,Source System Analysis,Data Engineer,90
+nir_infa_analyse,Analysis & Design,Source System Analysis,Data Engineer,85
+DI_ALTERYX_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Teradata_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+SSIS PACKAGE DOCUMENTATION,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_ALTERYX DOCUMENTATION,Support & Maintain,Documentation & Lineage,Data Engineer,95
+SNOWFLAKE PROCEDURE DOCUMENTATION,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Hive_to_BigQuery_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+INFA_DOCUMENTATION,Support & Maintain,Documentation & Lineage,Data Engineer,95
+GCP BIGQUERY DOCUMENTATION,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DB2 DOCUMENTATION,Support & Maintain,Documentation & Lineage,Data Engineer,95
+OracleToCosmosDB_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+ABAP_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95

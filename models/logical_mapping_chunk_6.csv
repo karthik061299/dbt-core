@@ -1,0 +1,110 @@
+AgentName,Phases,Deliverables,Roles,Map Confidence Score
+Postgres_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+SSIS_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+mySQL Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Hive to Delta Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Snowflake_to_PySpark_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+MarkLogic_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Hive_to_PySpark_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+HANA Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Sas_to_Python_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+SAS_to_Python_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+Talend_to_PySpark_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DB2_DOCUMENTATION,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_ECL_to_JavaSpark_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Informatica_to_JavaSpark_Documentation_CVS,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI-DQ_Recommendation,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_ECL_Documentation_JSON,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_ECL_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_Teradata_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+KK_SSIS_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+ASC_SK_WALLET_DOC_AGENT,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_SSIS_Documentation_JSON,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_PL/SQL_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_INFA_Inventory,Analysis & Design,Source System Analysis,Data Engineer,85
+DI_INFA_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+PySpark Unit Testing_J,Build & Test,Data Quality & Validation,Data Engineer,95
+Postgres_to_PySpark_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+ABAP_to_PySpark_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA TO PYTHON CONVERSION TESTER,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA TO PYTHON RECON TESTER,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+SAS_PySpark_UnitTest,Build & Test,Data Quality & Validation,Data Engineer,95
+DB2_To_SYNAPSE_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+HANA to BigQuery Unit Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+HANA to BigQuery Conversion Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+HANA to BigQuery Recon Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+INFA_to_PySpark_UnitTest,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA_to_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+SAS_to_Python_Unit_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+SAS_to_Python_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+SAS_to_Python_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+Talend_to_PySpark_Unit_Test,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA_To_Snowflake_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA_To_Snowflake_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+DI_Informatica_To_ADF_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+DI_Informatica_To_ADF_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+Java_Springboot_TestCases_Generator,Build & Test,Data Quality & Validation,Data Engineer,90
+AbInitio Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DB2_Pyspark_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+PowerBi_Documentation,Support & Maintain,Documentation & Lineage,Insights Engineer,95
+Report documentation agent,Support & Maintain,Documentation & Lineage,Business Analyst,85
+Informatica_to_Snowflake Doc,Support & Maintain,Documentation & Lineage,Data Engineer,95
+json extractor test,Analysis & Design,Source System Analysis,Data Engineer,90
+Postgres_to_PySpark_Unit_Testing,Build & Test,Data Quality & Validation,Data Engineer,95
+Snowflake_to_PySpark_UnitTest,Build & Test,Data Quality & Validation,Data Engineer,95
+Snowflake_to_PySpark_ConversionTester,Build & Test,Data Quality & Validation,Data Engineer,95
+DB2_to_SYNAPSE_Unit_Testing,Build & Test,Data Quality & Validation,Data Engineer,95
+Hive_to_PySpark_UnitTest,Build & Test,Data Quality & Validation,Data Engineer,95
+Hive_to_PySpark_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+Hive_to_PySpark_Reconciliation,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+Hive_to_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+XSLT_to_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+XSLT_to_PySpark_Reconciliation,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+XSLT_to_PySpark_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+XSLT_to_PySpark_UnitTest,Build & Test,Data Quality & Validation,Data Engineer,95
+ABAP_to_PySpark_Unit_Testing,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA_to_PySpark_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA_to_PySpark_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+Talend_to_PySpark_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+Talend_to_PySpark_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+CSV_Javacode,Build & Test,Ingestion & Transformation,Data Engineer,80
+INFA TO PYTHON CODE REVIEWER,Build & Test,Pipeline Review,Data Architect,90
+DI_SSIS_to_PySpark_Unit_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_SSIS_to_PySpark_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+SSIS_To_PySpark_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+SSIS_To_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+Hive to Delta Unit Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+Hive to Delta Conversion Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+Snowflake_to_PySpark_Reconciliation,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+Hive to Delta Recon Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+AbInitio to SparkJava Unit Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+AbInitio to SparkJava Conversion Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+AbInitio to SparkJava Recon Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+sample agent for manual script generation,Build & Test,Ingestion & Transformation,Data Engineer,90
+DI_SAS_to_BigQuery_Unit_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_SAS_to_BigQuery_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+Informatica_DQ_recommendation,Build & Test,Data Quality & Validation,Data Engineer,95
+INFA_To_Snowflake_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+DI_Informatica_To_ADF_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+DI_INFA_XML_Table_field extraction,Analysis & Design,Source System Analysis,Data Engineer,90
+Test2_Elan,Build & Test,Data Quality & Validation,Data Engineer,80
+Test1_Elan,Build & Test,Data Quality & Validation,Data Engineer,80
+Postgres_to_PySpark_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+mySQL Analyze,Analysis & Design,Source System Analysis,Data Architect,85
+Hive to Delta Reviewer,Build & Test,Pipeline Review,Data Architect,90
+AbInitio to SparkJava Reviewer,Build & Test,Pipeline Review,Data Architect,90
+DB2_TO_SYNAPSE_REVIEWER,Build & Test,Pipeline Review,Data Architect,90
+SSIS_Package_to_Python_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+SSIS_Package_to_Python_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+KK_SSIS_To_Snowflake_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+Hive to Delta Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+AbInitio to SparkJava Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+SNOWFLAKE_TO_BIGQUERY_PLAN,Strategy & Planning,Effort Estimation,Data Architect,90
+HANA to BigQuery Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+INFA_to_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+Sas_to_Python_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+Talend_to_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+Oracle_to_PostgreSQL_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+DB2_to_Oracle_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+DI_SAS_To_BigQuery_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+Test-SNF2,Strategy & Planning,Architecture Definition,Data Architect,80

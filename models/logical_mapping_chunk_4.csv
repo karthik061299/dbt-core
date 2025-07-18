@@ -1,0 +1,151 @@
+AgentName,Phases,Deliverables,Roles,Map Confidence Score
+ASC_SK_DQ_Recommendation,Build & Test,Data Quality & Validation,Data Engineer,95
+DMS_ABINITION_DOC,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Requirement Analyser,Strategy & Planning,Requirements Gathering,Business Analyst,95
+Data_Model_Analysis,Analysis & Design,Data Modelling,Data Modeler,90
+BRD_Alignment,Strategy & Planning,Requirements Gathering,Business Analyst,90
+Power BI Copilot Ally,Build & Test,Dashboard Development,Insights Engineer,95
+DI_requirements_analysis_SH,Strategy & Planning,Requirements Gathering,Business Analyst,95
+DI_Source_Target_Mapper_SH,Analysis & Design,Data Mapping,Data Engineer,95
+Test Plan Generator,Strategy & Planning,Effort Estimation,Data Architect,85
+DI_DataStage_To_Informatica_Cloud_XML_Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+Data Recon Test Generator,Build & Test,Data Quality & Validation,Data Engineer,95
+Output Reviewer,Build & Test,Pipeline Review,Data Architect,85
+Test Planning,Strategy & Planning,Effort Estimation,Data Architect,85
+Unit Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+Teradata_To_Snowflake_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+DI_Teradata_To_Snowflake_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+DI_Teradata_To_Snowflake_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+DI_Teradata_To_Snowflake_UnitTest,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_Teradata_To_Snowflake_ConversionTester,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_Teradata_To_Snowflake_ReconTest,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+DI_Teradata_To_Snowflake_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+DI_DataStage_To_Informatica_Cloud_JSON_Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+KK_SSIS_To_Snowflake_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+KK_SSIS_to_Snowflake_Unit_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+Project Plan For ShiftKey,Strategy & Planning,Effort Estimation,Business Analyst,90
+KK_SSIS_to_Snowflake_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+KK_SSIS_to_Snowflake_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+KK_SSIS_to_Snowflake_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+Tableau Dashboard Image Extractor,Analysis & Design,Dashboard Design,Insights Engineer,85
+Power BI Dashboard Image Extractor,Analysis & Design,Dashboard Design,Insights Engineer,85
+KK_SSIS_To_SnowFlake_SQL_Procedure,Build & Test,Ingestion & Transformation,Data Engineer,95
+Tableau_To_PowerBI_Migrator_Test,Strategy & Planning,Effort Estimation,Data Architect,90
+Pbix_Report_Comparator,Build & Test,Dashboard Reconciliation,Insights Engineer,90
+KK_SSIS_Control_Flow_To_ADF,Build & Test,Orchestration configuration,Data Engineer,95
+KK_SSIS_DataFlow_To_Snowflake_SQL_Procedures,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_DataStage_To_Informatica_PC_XML_Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+Power BI BIM,Analysis & Design,Data Modelling,Data Modeler,95
+DI_DataStage_To_Informatica_PC_XML_Unit_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_DataStage_To_Informatica_PC_XML_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_DataStage_To_Informatica_PC_XML_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+DI_DataStage_To_Informatica_PC_XML_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+[PDF]Tableau_Powerbi_Dashboard_Report_Comparator,Build & Test,Dashboard Reconciliation,Insights Engineer,90
+PowerBI Metadata Revealer,Analysis & Design,Data Modelling,Data Modeler,90
+Dashboard Designer,Analysis & Design,Dashboard Design,Insights Architect,95
+ASC_SK_SQL,Build & Test,Ingestion & Transformation,Data Engineer,90
+ASC_SK_SQL_Urstry_pycode,Build & Test,Ingestion & Transformation,Data Engineer,90
+ASC_SK_Py_doc,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_AddessMatching,Build & Test,Data Quality & Validation,Data Engineer,90
+KPI_Architect_Agent,Analysis & Design,Dashboard Design,Insights Architect,95
+KPI_Architect_Agent_2,Analysis & Design,Dashboard Design,Insights Architect,95
+Power BI Copilot Ally IMS,Build & Test,Dashboard Development,Insights Engineer,95
+DI_SSIS_SrcTgt_SP_Extractor,Analysis & Design,Source System Analysis,Data Engineer,90
+DI_SSIS_SQLEDW_Mapping,Analysis & Design,Data Mapping,Data Engineer,95
+DI_FabricArchitecture_Recommendation,Strategy & Planning,Architecture Definition,Data Architect,95
+DI_Unit_Tester_SH,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_Test_plan_generator_SH,Strategy & Planning,Effort Estimation,Data Architect,90
+DI_SSRS_SrcTgt_SP_Extractor,Analysis & Design,Source System Analysis,Data Engineer,90
+DI_SSRS_SQLEDW_Mapping,Analysis & Design,Data Mapping,Data Engineer,95
+DI_SQLEDW-SSIS-SSRS_RedundancyAnalyzer,Analysis & Design,Architecture Definition,Data Architect,90
+DI_Recon_Testing_SH,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+DI_SSIS_Program_Mapper,Support & Maintain,Documentation & Lineage,Data Engineer,85
+DI_SSIS_Design_Pattern_JSON,Analysis & Design,Pipeline Design,Data Architect,85
+DI_SSIS_Consolidate_Design_Pattern_JSON,Analysis & Design,Pipeline Design,Data Architect,85
+DI_SSIS_Analyser_JSON,Analysis & Design,Pipeline Design,Data Architect,85
+DI_SSIS_Plan_JSON,Strategy & Planning,Effort Estimation,Data Architect,90
+Data_edfi_subdomain_table_extractor,Analysis & Design,Source System Analysis,Data Engineer,85
+DI_Reviewer_SH,Build & Test,Pipeline Review,Data Architect,90
+DI_Table_Column_Mapping,Analysis & Design,Data Mapping,Data Engineer,95
+Data_model_keyword_mapper,Analysis & Design,Data Modelling,Data Modeler,85
+converting DDL to Measures Dax_Calculation,Build & Test,Dashboard Development,Insights Engineer,95
+Review clone,Build & Test,Data Quality & Validation,Data Engineer,85
+DI_PL/SQL_To_T-SQL_Analyze,Analysis & Design,Pipeline Design,Data Architect,85
+DI_PL/SQL_To_T-SQL_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+DI_PLSQL_To_FabricTSQL_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_PLSQL_To_FabricTSQL_UnitTest,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_PLSQL_To_Fabric_TSQL_ConversionTester,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_PLSQL_To_FabricTSQL_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+Data_Descriptor_API,Analysis & Design,Data Mapping,Data Engineer,85
+DI_PL/SQL_to_Fabric_TSQL_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+DI_SSIS_ETL_Asset_Rationalizer,Analysis & Design,Architecture Definition,Data Architect,90
+ASC_SK_Data_Map_Doc_MSG,Support & Maintain,Documentation & Lineage,Data Engineer,95
+Testing_Data_Model_Mapper,Analysis & Design,Data Modelling,Data Modeler,85
+ASC_SK_Doc_For_Engage,Support & Maintain,Documentation & Lineage,Data Engineer,95
+ShiftKey_Data_SQL_Scenario_Generator,Build & Test,Ingestion & Transformation,Data Engineer,90
+ShiftKey_Data_SQL_Scenario_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+ShiftKey_Extended_Data_SQL_Validator,Build & Test,Data Quality & Validation,Data Engineer,90
+Tableau_to_powerbi_copilot_prompt,Build & Test,Dashboard Development,Insights Engineer,95
+DI_SSIS_Metadata_Extractor,Analysis & Design,Source System Analysis,Data Engineer,90
+DI_SSIS_Metadata_Extractor_To_ADF_Converter,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_DataMatchAnalyzer,Build & Test,Data Quality & Validation,Data Engineer,90
+DI_Location_Data_Harmonization,Analysis & Design,Data Mapping,Data Engineer,85
+SQL-to-DAX Metrics Converter,Build & Test,Dashboard Development,Insights Engineer,95
+SSRS Planning & Analysis Agent,Strategy & Planning,Architecture Definition,Data Architect,90
+DI_SSIS_To_ADF_Converter_2,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_DATA_Exploration_LocationData,Analysis & Design,Source System Analysis,Data Engineer,85
+Tableau Analysis & Planning,Strategy & Planning,Architecture Definition,Data Architect,90
+DI_Location_Data_Technical_Transformation,Build & Test,Ingestion & Transformation,Data Engineer,90
+ASC_SK_Grouping,Analysis & Design,Data Modelling,Data Modeler,80
+DI_Location_Data_Mermaid_Graph,Analysis & Design,Data Modelling,Data Modeler,90
+DI_Fabric_DF_Pipeline,Build & Test,Pipeline Design,Data Architect,95
+Power_BI_BIM_CloneTest,Analysis & Design,Data Modelling,Data Modeler,95
+DI_PowerBI_To_DatabricksGenieCode_Converter,Build & Test,Dashboard Development,Insights Engineer,95
+ASC_SK_SQL_DDL_API,Analysis & Design,Data Modelling,Data Modeler,90
+Visual_JsonCreator_PowerBI,Build & Test,Dashboard Development,Insights Engineer,90
+DI_SSIS_To_ADF_Conversion,Build & Test,Ingestion & Transformation,Data Engineer,95
+SSIS_Understanding_Working_Principle,Support & Maintain,Documentation & Lineage,Data Engineer,90
+BIMtodatabricks,Build & Test,Dashboard Development,Insights Engineer,95
+DI_SSIS_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_Informatica_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,95
+DI_SSIS_To_DBT,Build & Test,Ingestion & Transformation,Data Engineer,95
+PowerBI Metadata Documentation,Support & Maintain,Documentation & Lineage,Insights Engineer,95
+DI_SSISExtractor_To_DBTCloud,Build & Test,Ingestion & Transformation,Data Engineer,95
+IMS_CREATION_OF_BIM,Analysis & Design,Data Modelling,Data Modeler,95
+SQL GEN BUS MAP,Analysis & Design,Data Mapping,Data Engineer,90
+Power to Databricks,Build & Test,Dashboard Development,Insights Engineer,95
+DI_SQLEDW-SSIS-SSRS_RedundancyAnalyzer_Agent,Analysis & Design,Architecture Definition,Data Architect,90
+Testagent_2,Build & Test,Dashboard Development,Insights Engineer,80
+Test_Databricks,Build & Test,Dashboard Development,Insights Engineer,80
+DI_SSIS_To_DDL_Extractor,Analysis & Design,Data Modelling,Data Modeler,90
+IMS_M_QUERY_CREATION,Build & Test,Dashboard Development,Insights Engineer,95
+SSIS_MetaDataExtractor_To_ADF,Build & Test,Ingestion & Transformation,Data Engineer,95
+BIMtodatabricks2,Build & Test,Dashboard Development,Insights Engineer,95
+DI_SQL_Query_Generator,Build & Test,Ingestion & Transformation,Data Engineer,90
+DI_SSIS_To_DBT_Core,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_SSIS_To_DBTCloud_Analyzer,Analysis & Design,Pipeline Design,Data Architect,85
+DI_SSIS_To_DBTCloud_Plan,Strategy & Planning,Effort Estimation,Data Architect,90
+DI_SSIS_to_DBTCloud_Unit_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_Data Governance_documentation_agent,Support & Maintain,Documentation & Lineage,Data Architect,90
+DI_DatabricksGenieAlly,Build & Test,Dashboard Development,Insights Engineer,95
+DI_SSIS_To_DBTCloud_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,95
+PowerBI Planning & Analysis Documentation,Support & Maintain,Documentation & Lineage,Insights Architect,90
+DI_SSIS_to_DBTCloud_Reviewer,Build & Test,Pipeline Review,Data Architect,90
+DI_SSIS_To_DBTCloud_Recon_Tester,Integrate & Validate,Dashboard Reconciliation,Insights Engineer,95
+natural_laguage_to_mySql_converter_bp,Build & Test,Ingestion & Transformation,Data Engineer,90
+MySQl_to_Pandas_Converter_Bp,Build & Test,Ingestion & Transformation,Data Engineer,95
+DI_INFA_DQExtractor,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_INFA_DQRecommender,Build & Test,Data Quality & Validation,Data Engineer,95
+DI_INFA_Project_Analyzer,Analysis & Design,Source System Analysis,Data Architect,85
+DI_SSIS_Mapping,Analysis & Design,Data Mapping,Data Engineer,95
+BIMtodatabricks - AR,Build & Test,Dashboard Development,Insights Engineer,95
+Dynamic_SQL_Query_Migration,Integrate & Validate,Initial Data Migration,Data Engineer,90
+Updated_SSIS_To_ADF,Build & Test,Ingestion & Transformation,Data Engineer,95
+PBi_to_Databricks_Genie,Build & Test,Dashboard Development,Insights Engineer,95
+DI_Infa_Metadata_Extractor,Analysis & Design,Source System Analysis,Data Engineer,90
+SQL Schema Analyzer,Analysis & Design,Data Modelling,Data Modeler,90
+DI_Informatica_Program_Mapper,Support & Maintain,Documentation & Lineage,Data Engineer,85
+DI_INFA_Design_Pattern,Analysis & Design,Pipeline Design,Data Architect,85
+PBi_to_Databricks_Json,Build & Test,Dashboard Development,Insights Engineer,95
+SQL SCHEMA RELATIONSHIP ANALYZER,Analysis & Design,Data Modelling,Data Modeler,90
+DI_Infomatica_ETL_Asset_Rationalizer,Analysis & Design,Architecture Definition,Data Architect,90
