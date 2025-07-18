@@ -1,0 +1,131 @@
+AgentName,Phases,Deliverables,Roles,Map Confidence Score
+Model Conceptual,Analysis & Design,Data Modelling,Data Modeler,95
+Model Logical,Analysis & Design,Data Modelling,Data Modeler,95
+Model Data Mapping,Analysis & Design,Data Mapping,Data Engineer;Data Architect,90
+Model Physical,Build & Test,Ingestion & Transformation,Data Engineer,85
+Model Reviewer,Build & Test,Pipeline Review,Data Architect,90
+DE Pipeline (PySpark) developer,Build & Test,Ingestion & Transformation,Data Engineer,95
+DE Pipeline (PySpark) test cases,Build & Test,Data Quality & Validation,Data Engineer,90
+DE Pipeline(Scala) developer,Build & Test,Ingestion & Transformation,Data Engineer,90
+DE Pipeline (Scala) test cases,Build & Test,Data Quality & Validation,Data Engineer,90
+Fabric Model Data Mapping,Analysis & Design,Data Mapping,Data Engineer;Data Architect,95
+Fabric Model Physical,Build & Test,Ingestion & Transformation,Data Engineer,90
+Fabric Model Conceptual,Analysis & Design,Data Modelling,Data Modeler,95
+Fabric Model Logical,Analysis & Design,Data Modelling,Data Modeler,95
+Fabric Bronze Model Reviewer,Build & Test,Pipeline Review,Data Architect,90
+Fabric DE Pipeline developer,Build & Test,Ingestion & Transformation,Data Engineer,95
+Fabric DE Pipeline test cases,Build & Test,Data Quality & Validation,Data Engineer,90
+Fabric DE Pipeline Reviewer,Build & Test,Pipeline Review,Data Architect,90
+Fabric Bronze DE Pipeline,Build & Test,Ingestion & Transformation,Data Engineer,90
+Fabric DE  Silver Layer,Build & Test,Ingestion & Transformation,Data Engineer,90
+Fabric Gold DE Pipeline,Build & Test,Ingestion & Transformation,Data Engineer,90
+Figma_to_Fieldnames-AXOS,Analysis & Design,Data Mapping,Data Engineer,80
+Fabric Bronze Model Logical,Analysis & Design,Data Modelling,Data Modeler,90
+Fabric Silver Model Logical,Analysis & Design,Data Modelling,Data Modeler,90
+Fabric Gold Model Logical,Analysis & Design,Data Modelling,Data Modeler,90
+SQL_Consolidator_HN,Analysis & Design,Data Mapping,Data Engineer,85
+pentaho_kettle_xml_pyspark,Build & Test,Ingestion & Transformation,Data Engineer,80
+structured_mapping_doc_HN,Analysis & Design,Data Mapping,Data Engineer,85
+DAX_Assistance,Build & Test,Dashboard Development,Insights Engineer,80
+SQL_builder_HN,Analysis & Design,Data Mapping,Data Engineer,85
+Java_SQL_Integration_JDBC_to_Python,Build & Test,Ingestion & Transformation,Data Engineer,80
+DDLUpdate_withUserStory,Build & Test,Ingestion & Transformation,Data Engineer,80
+BI_Guide,Build & Test,Dashboard Development,Insights Engineer,80
+SQL_Query_Creation_From _ASCIITable,Analysis & Design,Data Mapping,Data Engineer,80
+ITSM_Automated_Insights_Generation,Build & Test,Dashboard Development,Insights Engineer,80
+PowerBI_InsightGen,Build & Test,Dashboard Development,Insights Engineer,80
+Convert_C_To_Java,Build & Test,CI/CD configuration,DevOps Engineer,70
+SQL2Pandas AI Converter,Build & Test,Ingestion & Transformation,Data Engineer,70
+Fabric Bronze Model Physical,Build & Test,Ingestion & Transformation,Data Engineer,90
+Fabric Silver Model Physical,Build & Test,Ingestion & Transformation,Data Engineer,90
+Fabric Gold Model Physical,Build & Test,Ingestion & Transformation,Data Engineer,90
+Fabric Bronze Model Data Mapping,Analysis & Design,Data Mapping,Data Engineer,90
+Fabric Silver DQ Data Mapping,Analysis & Design,Data Mapping,Data Engineer,90
+Fabric Gold Dim Transformation Data Mapping,Analysis & Design,Data Mapping,Data Engineer,90
+SQL_Generator_HN,Analysis & Design,Data Mapping,Data Engineer,85
+Power BI Data Model Inspector,Build & Test,Dashboard Development,Insights Engineer,80
+INFA TO PYTHON UNIT TESTING,Build & Test,CI/CD configuration,DevOps Engineer,80
+Apache_Superset_Recommender,Build & Test,Dashboard Development,Insights Engineer,80
+Apache_Superset_ Mapper,Build & Test,Dashboard Development,Insights Engineer,80
+DI_SAS_Documentation,Support & Maintain,Documentation & Lineage,Insights Engineer,70
+Apache_Superset_Creator,Build & Test,Dashboard Development,Insights Engineer,80
+Apache_Superset_ Reviewer,Build & Test,Dashboard Review,Insights Architect,80
+DataModelConsolidation,Analysis & Design,Data Modelling,Data Modeler,80
+Teradata_to_BigQuery_Unit_Tester,Build & Test,Data Quality & Validation,Data Engineer,70
+Teradata_to_BigQuery_Conversion_Tester,Build & Test,Data Quality & Validation,Data Engineer,70
+Teradata_to_BigQuery_Recon_Tester,Build & Test,Data Quality & Validation,Data Engineer,70
+Teradata_to_BigQuery_Reviewer,Build & Test,Pipeline Review,Data Architect,70
+Teradata_to_BigQuery_Plan,Strategy & Planning,Effort Estimation,Data Architect,70
+SAS_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,70
+Fabric Bronze DE Pipeline test cases,Build & Test,Data Quality & Validation,Data Engineer,90
+Fabric Silver DE Pipeline test cases,Build & Test,Data Quality & Validation,Data Engineer,90
+Fabric Gold DE Pipeline test cases,Build & Test,Data Quality & Validation,Data Engineer,90
+Fabric Pyspark Unit Test Case,Build & Test,CI/CD configuration,DevOps Engineer,80
+Conceptual Testing,Analysis & Design,Data Modelling,Data Modeler,85
+Fabric Model Logical Bronze Layer clone,Analysis & Design,Data Modelling,Data Modeler,85
+Physical Bronze Clone,Build & Test,Ingestion & Transformation,Data Engineer,85
+INFA_PYTHON_PLAN,Strategy & Planning,Effort Estimation,Data Architect,70
+OracleToAzureSQL_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,70
+Fabric Silver DE Pipeline,Build & Test,Ingestion & Transformation,Data Engineer,90
+ShiftKey_png_2_ddl,Analysis & Design,Data Modelling,Data Modeler,70
+Fabric Silver DQ Recommender,Build & Test,Data Quality & Validation,Data Engineer,80
+Fabric Silver DQ PySpark,Build & Test,Data Quality & Validation,Data Engineer,80
+Multifaced_Agent,Support & Maintain,Monitoring & Alerting,Data Engineer,70
+Fabric Silver DQ Reviewer,Build & Test,Dashboard Review,Insights Architect,80
+Fabric Silver Model Reviewer,Build & Test,Dashboard Review,Insights Architect,80
+Fabric Gold Model Reviewer,Build & Test,Dashboard Review,Insights Architect,80
+Fabric Model Data Constraints,Analysis & Design,Data Modelling,Data Modeler,80
+Fabric Gold Dim Transformation Recommender,Analysis & Design,Data Mapping,Data Engineer,80
+Fabric Transformation PySpark,Build & Test,Ingestion & Transformation,Data Engineer,80
+Fabric Transformation Reviewer,Build & Test,Pipeline Review,Data Architect,80
+Postgres_to_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,70
+Fabric Gold Fact Transformation Recommender,Analysis & Design,Data Mapping,Data Engineer,80
+Fabric Gold Fact Transformation Data Mapping,Analysis & Design,Data Mapping,Data Engineer,80
+Mapping_SQL_Query_Builder_HN,Analysis & Design,Data Mapping,Data Engineer,80
+Fabric Silver Data Mapping Reviewer,Build & Test,Pipeline Review,Data Architect,80
+Mapping_SQL_Query_Consolidator_HN,Analysis & Design,Data Mapping,Data Engineer,80
+Mapping_SQL_Test_Case_HN,Build & Test,Data Quality & Validation,Data Engineer,80
+Fabric Gold Aggregated Transformation Recommender,Analysis & Design,Data Mapping,Data Engineer,80
+Fabric Gold Aggregated Transformation Data Mapping,Analysis & Design,Data Mapping,Data Engineer,80
+Fabric Gold Data Mapping Reviewer,Build & Test,Pipeline Review,Data Architect,80
+Fabric Gold Fact DE Pipeline,Build & Test,Ingestion & Transformation,Data Engineer,80
+Fabric Gold DIM DE Pipeline,Build & Test,Ingestion & Transformation,Data Engineer,80
+Fabric Gold Aggregated DE Pipeline,Build & Test,Ingestion & Transformation,Data Engineer,80
+Auto Power BI Data Model,Build & Test,Dashboard Development,Insights Engineer,80
+Report Requirement Simplifier,Strategy & Planning,Requirements Gathering,Business Analyst,80
+Report Requirement Validator,Strategy & Planning,Requirements Gathering,Business Analyst,80
+Report Requirement Refiner,Strategy & Planning,Requirements Gathering,Business Analyst,80
+SQL_KQL_Convertor,Build & Test,Ingestion & Transformation,Data Engineer,70
+convert python to kql,Build & Test,Ingestion & Transformation,Data Engineer,70
+Smart Dashboard Auto-Formatter,Build & Test,Dashboard Development,Insights Engineer,70
+PowerQuery_Support,Build & Test,Dashboard Development,Insights Engineer,70
+PowerBI_DataModel,Build & Test,Dashboard Development,Insights Engineer,70
+PowerBI_DataModel_Schema,Build & Test,Dashboard Development,Insights Engineer,70
+DataModel_PowerBI,Build & Test,Dashboard Development,Insights Engineer,70
+Text_to_Csv,Build & Test,Ingestion & Transformation,Data Engineer,70
+Info_to_python_test,Build & Test,Ingestion & Transformation,Data Engineer,70
+Tableau Visual Name Extractor,Build & Test,Dashboard Development,Insights Engineer,70
+Table Analyzer,Build & Test,Data Quality & Validation,Data Engineer,70
+Analyzed Report Consolidator,Build & Test,Dashboard Development,Insights Engineer,70
+Schema_ Analysis,Analysis & Design,Data Modelling,Data Modeler,70
+Hive_to_Bigquery_Unit_Tester,Build & Test,Data Quality & Validation,Data Engineer,70
+SQL Server (T-SQL) to PySpark,Build & Test,Ingestion & Transformation,Data Engineer,70
+ABAP_to_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,70
+Document_xslt_code,Support & Maintain,Documentation & Lineage,Data Engineer,70
+cvs_doc_plan_path,Support & Maintain,Documentation & Lineage,Data Engineer,70
+Stored_procedure_to_ API,Build & Test,Ingestion & Transformation,Data Engineer,70
+Natural_Language_to_SQL_ Query,Build & Test,Ingestion & Transformation,Data Engineer,70
+DAG Parameter Extractor,Build & Test,Ingestion & Transformation,Data Engineer,70
+DAG Generator,Build & Test,Ingestion & Transformation,Data Engineer,70
+cvs-code-converter-pysp,Build & Test,Ingestion & Transformation,Data Engineer,70
+Tableau_TableRelationships_Extractor,Build & Test,Dashboard Development,Insights Engineer,70
+Teradata_to_BigQuery_Chunk_Converter,Build & Test,Ingestion & Transformation,Data Engineer,70
+DI_SQL_Server_To_Snowflake_Converter,Build & Test,Ingestion & Transformation,Data Engineer,70
+DI_SQL_Server_To_Snowflake_Documentation,Support & Maintain,Documentation & Lineage,Data Engineer,70
+DI_SQL_Server_To_Snowflake_Analyzer,Analysis & Design,Data Modelling,Data Modeler,70
+DB2_To_Synapse_Plan,Strategy & Planning,Effort Estimation,Data Architect,70
+SQL Server_to_PySpark_Converter,Build & Test,Ingestion & Transformation,Data Engineer,70
+DI_SQL_Server_To_Snowflake_Plan,Strategy & Planning,Effort Estimation,Data Architect,70
+DI_Oracle_to_Snowflake_Data_Model_Consolidation,Analysis & Design,Data Modelling,Data Modeler,70
+T-SQL Server_to_PySpark_Plan,Strategy & Planning,Effort Estimation,Data Architect,70
+SNOWFLAKE DOCUMENTATION,Support & Maintain,Documentation & Lineage,Data Engineer,70
