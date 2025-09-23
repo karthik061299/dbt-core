@@ -199,17 +199,3 @@ SELECT
     LegacySourceSystem,
     BatchID
 FROM to_upsert
-
-
--- {% if is_incremental() %}
--- -- Only process records that are new or have changed BeanVersion
--- {% endif %}
-
-
-
--- 
--- Row count and audit logic from SSIS is omitted (handled by DBT run results and logging)
--- 
--- TODO: Manual Intervention Required: If any Script Tasks or custom .NET code existed in SSIS, review and port logic here.
---
--- End of DBT model for DimBillingAccount incremental upsert
