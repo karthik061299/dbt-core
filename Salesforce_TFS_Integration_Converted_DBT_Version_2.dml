@@ -1,0 +1,36 @@
+{{ config(
+    materialized='table',
+    alias='case_attachments_v2'
+) }}
+
+WITH last_pull AS (
+  SELECT MAX(LastPullDate) AS LastPullDate
+  FROM {{ source('dataset', 'IntegrationLastPullDate') }}
+),
+cases AS (
+  SELECT id, kws_np__WorkItemId__c
+  FROM {{ source('dataset', 'case') }}
+),
+attachments AS (
+  SELECT
+    cdl.LinkedEntityId,
+    cd.Title,
+    cd.FileExtension,
+    cdv.VersionData,
+    cb.Name AS CreatedByName,
+    cdl.SystemModstamp
+  FROM {{ source('dataset', 'ContentDocumentLink') }} cdl
+  JOIN {{ source('dataset', 'ContentDocument') }} cd
+    ON cdl.ContentDocumentId = cd.Id
+  JOIN {{ source('dataset', 'ContentVersion') }} cdv
+    ON cd.Id = cdv.ContentDocumentId
+  JOIN {{ source('dataset', 'User') }} cb
+    ON cd.CreatedById = cb.Id
+  WHERE LinkedEntityId IN (SELECT id FROM cases)
+    AND cdl.SystemModstamp > (SELECT LastPullDate FROM last_pull)
+    AND cdl.SystemModstamp <= CURRENT_TIMESTAMP()
+    AND cd.CreatedById != '@SFIntegrationUser'   -- ❌ bug: treated as literal string
+)
+SELECT *
+FROM attachments
+WHERE (FileExtension IS NULL OR FileExtension != "snote");
