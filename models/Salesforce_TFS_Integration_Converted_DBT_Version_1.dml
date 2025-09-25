@@ -1,0 +1,28 @@
+{{ config(
+    materialized='table',
+    alias='case_attachments_v1'
+) }}
+
+WITH last_pull AS (
+  SELECT MAX(LastPullDate) AS LastPullDate
+  FROM {{ source('dataset', 'IntegrationLastPullDate') }}
+),
+cases AS (
+  SELECT id, kws_np__WorkItemId__c
+  FROM {{ source('dataset', 'case') }}
+),
+attachments AS (
+  SELECT
+    LinkedEntityId,
+    ContentDocument.Title,
+    ContentDocument.FileExtension,
+    ContentDocument.LatestPublishedVersion.VersionData,
+    ContentDocument.CreatedBy.Name,
+    SystemModstamp
+  FROM {{ source('dataset', 'ContentDocumentLink') }}
+  WHERE LinkedEntityId IN (SELECT id FROM {{ source('dataset','case') }})
+    AND SystemModstamp > last_pull.LastPullDate   -- ❌ wrong reference (not joined)
+)
+SELECT *
+FROM attachments
+WHERE ContentDocument.FileExtension != "snote" OR ContentDocument.FileExtension IS NULL;
